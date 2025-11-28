@@ -2357,6 +2357,21 @@ details > summary { list-style: none !important; }
 .settings-card--updates .settings-card__body{
   margin: 0;
 }
+/* Тело карточки автообновления: выравниваем текст и кнопку вправо */
+.settings-card__body--updates{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+/* Маленькая подпись под автообновлением и версией */
+.settings-caption{
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--text-subtle);
+}
 
 
 /* Строка параметра: сетка label/controls */

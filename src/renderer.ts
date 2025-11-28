@@ -32,6 +32,9 @@ type AvenorApi = {
 
   // ▼ APP
   openExternal?: (url: string) => Promise<boolean | void>;
+
+  checkUpdates?: () => Promise<any>;
+  installUpdate?: () => Promise<void>;
 };
 
 function safePath(ofFile: any): string | null {
@@ -1288,6 +1291,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   // история как и раньше
   renderHistoryOnStartup().catch(() => {});
 });
+
+
 
 const listCompress = document.getElementById("list-compress")!;
 // Счётчик и сортировка для истории сжатия
@@ -3056,6 +3061,118 @@ document.addEventListener("DOMContentLoaded", async () => {
       const ver = await api.getVersion();
       if (verSpan) verSpan.textContent = ver;
     } catch {}
+
+    // --- Автообновление ---
+    const checkUpdatesBtn = document.getElementById(
+      "settings-check-updates"
+    ) as HTMLButtonElement | null;
+    const updateStatusEl = document.getElementById(
+      "settings-update-status"
+    ) as HTMLParagraphElement | null;
+
+    if (checkUpdatesBtn && updateStatusEl) {
+      checkUpdatesBtn.disabled = false; // снимаем disabled из HTML
+
+      checkUpdatesBtn.addEventListener("click", async () => {
+        if (!api.checkUpdates) {
+          updateStatusEl.textContent = "Обновления не настроены.";
+          return;
+        }
+
+        const oldText = checkUpdatesBtn.textContent || "Проверить обновления";
+        checkUpdatesBtn.disabled = true;
+        checkUpdatesBtn.textContent = "Проверяю…";
+
+        const currentVer = verSpan?.textContent?.trim();
+        updateStatusEl.textContent = currentVer
+          ? `Текущая версия: ${currentVer}. Идёт проверка обновлений…`
+          : "Идёт проверка обновлений…";
+
+        try {
+          const res = await api.checkUpdates();
+          let msg = "";
+
+          if (typeof res === "string") {
+            // на всякий случай поддерживаем строковый ответ
+            msg = res;
+          } else if (res && typeof res === "object") {
+            const status = (res as any).status;
+            const cur =
+              (res as any).currentVersion ?? (res as any).current ?? null;
+            const latest =
+              (res as any).latestVersion ?? (res as any).latest ?? null;
+            const version =
+              (res as any).version || latest || (res as any).newVersion || "";
+
+            if ((res as any).message) {
+              msg = (res as any).message;
+            } else if (status === "no-update") {
+              msg =
+                cur && latest
+                  ? `Установлена последняя версия (${cur}).`
+                  : "Установлена последняя версия.";
+            } else if (status === "available") {
+              msg = version
+                ? `Найдена новая версия ${version}, идёт загрузка…`
+                : "Найдена новая версия, идёт загрузка…";
+            } else if (status === "downloaded") {
+              // 🔥 КЛЮЧЕВОЙ БЛОК — предлагать установить
+              if (api.installUpdate) {
+                const vLabel = version || "обновление";
+                const ok = window.confirm(
+                  `Обновление ${vLabel} уже загружено.\n\nУстановить сейчас? Приложение будет перезапущено.`
+                );
+
+                if (ok) {
+                  msg = `Устанавливаем ${vLabel}…`;
+                  updateStatusEl.textContent = msg;
+                  try {
+                    await api.installUpdate();
+                    // дальше управление уйдёт в autoUpdater.quitAndInstall()
+                    return;
+                  } catch (e) {
+                    console.error("installUpdate error", e);
+                    msg =
+                      "Не удалось установить обновление. Попробуйте перезапустить приложение.";
+                  }
+                } else {
+                  msg = version
+                    ? `Обновление ${version} загружено. Вы сможете установить его позже.`
+                    : "Обновление загружено. Вы сможете установить его позже.";
+                }
+              } else {
+                msg =
+                  version ||
+                  "Новая версия скачана. Перезапустите приложение для установки.";
+              }
+            } else if (status === "checking") {
+              msg = "Идёт проверка обновлений…";
+            } else if (status === "error") {
+              msg =
+                (res as any).error ||
+                "Ошибка при проверке обновлений. Попробуйте позже.";
+            } else {
+              msg = "Не удалось проверить обновления.";
+            }
+
+            if (cur && verSpan) {
+              verSpan.textContent = cur;
+            }
+          } else {
+            msg = "Не удалось проверить обновления.";
+          }
+
+          updateStatusEl.textContent = msg;
+        } catch (e) {
+          console.error("[settings] checkUpdates failed", e);
+          updateStatusEl.textContent = "Ошибка при проверке обновлений.";
+        } finally {
+          checkUpdatesBtn.disabled = false;
+          checkUpdatesBtn.textContent = oldText;
+        }
+      });
+    }
+
 
     // кнопка "Выбрать" путь загрузки
     const pickPathBtn = document.getElementById(

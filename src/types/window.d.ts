@@ -12,6 +12,77 @@ type RendererLicense = {
   proUntil?: string | null;
 };
 
+// Можно не заморачиваться с точным типом
+type JobStage =
+  | "preparing"
+  | "probe"
+  | "pass1"
+  | "pass2"
+  | "encoding"
+  | "compressing"
+  | "downloading"
+  | "merging"
+  | "post"
+  | "done"
+  | "error"
+  | "canceled";
+
+type JobProgress = {
+  id: string;
+  stage: JobStage;
+  percent?: number;
+  downloadedMB?: number;
+  totalMB?: number;
+  speed?: string;
+  eta?: string;
+  filepath?: string;
+  source?: "download" | "compress" | "convert";
+  meta?: any;
+  message?: string;
+};
+
+type AvenorApi = {
+  // очереди задач
+  addJob(p: any): Promise<string>;
+  addCompressJob(p: any): Promise<string>;
+  addConvertJob(p: any): Promise<string>;
+
+  // файловые диалоги
+  pickFolder(): Promise<string | null>;
+  pickDownloadDir(): Promise<string | null>;
+
+  // управление задачами
+  cancelJob(id: string): Promise<boolean>;
+  removeJob(id: string): Promise<boolean>;
+
+  // файловая система
+  revealInFolder(filePath: string): Promise<boolean>;
+
+  // SETTINGS
+  getSettings(): Promise<any>;
+  setSettings(partial: any): Promise<any>;
+
+  // APP
+  getVersion(): Promise<string>;
+  getAssetUrl(rel: string): Promise<string>;
+  checkUpdates(): Promise<any>;
+  openExternal(url: string): Promise<boolean | void>;
+
+  // HISTORY
+  getHistory(): Promise<any[]>;
+  historyRemove(id: string): Promise<void>;
+  clearHistory(
+    scope?: "all" | "download" | "compress" | "convert"
+  ): Promise<{ ok?: boolean } | void>;
+
+  // LICENSE
+  getLicense(): Promise<RendererLicense>;
+  setLicense(partial: Partial<RendererLicense>): Promise<RendererLicense>;
+
+  // прогресс задач
+  onProgress(cb: (p: JobProgress) => void): () => void;
+};
+
 declare global {
   interface Window {
     Avenor: any & {
@@ -20,9 +91,16 @@ declare global {
         partial: Partial<RendererLicense>
       ) => Promise<RendererLicense>;
       openExternal?: (url: string) => Promise<boolean | void>;
+
+      checkUpdates?: () => Promise<{
+        status: "no-update" | "checking" | "available" | "downloaded" | "error";
+        version?: string;
+        error?: string;
+      }>;
+
+      installUpdate?: () => Promise<void>;
     };
 
-    // делаем опциональным (мы в коде используем window.AvenorWindow?.)
     AvenorWindow?: {
       minimize(): void;
       toggleMaximize(): void;
@@ -32,3 +110,4 @@ declare global {
     };
   }
 }
+

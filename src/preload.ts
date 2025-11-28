@@ -25,7 +25,8 @@ contextBridge.exposeInMainWorld("Avenor", {
   getAssetUrl: (rel: string) => ipcRenderer.invoke("app:getAssetUrl", rel),
 
   checkUpdates: () => ipcRenderer.invoke("app:checkUpdates"),
-
+  installUpdate: () => ipcRenderer.invoke("app:installUpdate"),
+  
   // ▼ HISTORY
   getHistory: () => ipcRenderer.invoke("history:get"),
   historyRemove: (id: string) => ipcRenderer.invoke("history:remove", id),
