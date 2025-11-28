@@ -28,6 +28,31 @@ contextBridge.exposeInMainWorld("Avenor", {
   checkUpdates: () => ipcRenderer.invoke("updates:check"),
   installUpdate: () => ipcRenderer.invoke("updates:install"),
 
+
+  // подписка на прогресс скачивания обновления
+  onUpdateProgress: (
+    cb: (p: {
+      percent: number;
+      transferred: number;
+      total: number;
+      bytesPerSecond: number;
+    }) => void
+  ) => {
+    const listener = (_e: any, payload: any) => cb(payload);
+    ipcRenderer.on("updates:progress", listener);
+    return () => ipcRenderer.off("updates:progress", listener);
+  },
+
+  // подписка на общие события обновления (available / downloaded / error)
+  onUpdateEvent: (
+    cb: (e: { type: string; version?: string; message?: string }) => void
+  ) => {
+    const listener = (_e: any, payload: any) => cb(payload);
+    ipcRenderer.on("updates:event", listener);
+    return () => ipcRenderer.off("updates:event", listener);
+  },
+
+
   // ▼ HISTORY
   getHistory: () => ipcRenderer.invoke("history:get"),
   historyRemove: (id: string) => ipcRenderer.invoke("history:remove", id),

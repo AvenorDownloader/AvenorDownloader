@@ -225,6 +225,43 @@ function setupUpdates(mainWindow: BrowserWindow) {
   autoUpdater.autoDownload = true;
   autoUpdater.autoInstallOnAppQuit = true;
 
+  // События автообновления → шлём их в renderer
+  autoUpdater.on("update-available", (info) => {
+    console.log("[updates] update-available:", info.version);
+    mainWindow.webContents.send("updates:event", {
+      type: "available",
+      version: info.version,
+    });
+  });
+
+  autoUpdater.on("download-progress", (p) => {
+    const payload = {
+      percent: p.percent, // проценты
+      transferred: p.transferred, // сколько байт скачано
+      total: p.total, // общий размер
+      bytesPerSecond: p.bytesPerSecond, // скорость
+    };
+
+    console.log("[updates] download-progress:", payload);
+    mainWindow.webContents.send("updates:progress", payload);
+  });
+
+  autoUpdater.on("update-downloaded", (info) => {
+    console.log("[updates] update-downloaded:", info.version);
+    mainWindow.webContents.send("updates:event", {
+      type: "downloaded",
+      version: info.version,
+    });
+  });
+
+  autoUpdater.on("error", (err) => {
+    console.error("[updates] error:", err);
+    mainWindow.webContents.send("updates:event", {
+      type: "error",
+      message: err?.message || String(err),
+    });
+  });
+
   // Основной хендлер, который дергает кнопка "Проверить обновления"
   ipcMain.handle("updates:check", async () => {
     try {
@@ -273,13 +310,6 @@ function setupUpdates(mainWindow: BrowserWindow) {
         message: err?.message || "Не удалось проверить обновления.",
       };
     }
-  });
-
-  // Когда обновление скачано, автосообщение в лог (на всякий случай)
-  autoUpdater.on("update-downloaded", (info) => {
-    console.log("[updates] Update downloaded:", info.version);
-    // Рендерер сам спросит пользователя через window.confirm,
-    // мы просто дадим возможность installUpdate вызвать:
   });
 
   // Хендлер установки (renderer вызывает api.installUpdate())

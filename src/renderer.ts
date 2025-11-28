@@ -35,6 +35,19 @@ type AvenorApi = {
 
   checkUpdates?: () => Promise<any>;
   installUpdate?: () => Promise<void>;
+  // автообновления: подписки на события из preload/main
+  onUpdateProgress?: (
+    cb: (p: {
+      percent: number;
+      transferred: number;
+      total: number;
+      bytesPerSecond: number;
+    }) => void
+  ) => () => void;
+
+  onUpdateEvent?: (
+    cb: (e: { type: string; version?: string; message?: string }) => void
+  ) => () => void;
 };
 
 function safePath(ofFile: any): string | null {
@@ -3069,6 +3082,15 @@ document.addEventListener("DOMContentLoaded", async () => {
     const updateStatusEl = document.getElementById(
       "settings-update-status"
     ) as HTMLParagraphElement | null;
+    const updateProgressWrap = document.getElementById(
+      "settings-update-progress"
+    ) as HTMLDivElement | null;
+    const updateProgressFill = updateProgressWrap?.querySelector(
+      ".update-progress-fill"
+    ) as HTMLDivElement | null;
+    const updateProgressLabel = document.getElementById(
+      "settings-update-progress-label"
+    ) as HTMLSpanElement | null;
 
     if (checkUpdatesBtn && updateStatusEl) {
       checkUpdatesBtn.disabled = false; // снимаем disabled из HTML
@@ -3082,6 +3104,14 @@ document.addEventListener("DOMContentLoaded", async () => {
         const oldText = checkUpdatesBtn.textContent || "Проверить обновления";
         checkUpdatesBtn.disabled = true;
         checkUpdatesBtn.textContent = "Проверяю…";
+        // сбрасываем прогресс перед новой проверкой
+        if (updateProgressWrap && updateProgressFill) {
+          updateProgressWrap.style.display = "none";
+          updateProgressFill.style.width = "0%";
+        }
+        if (updateProgressLabel) {
+          updateProgressLabel.textContent = "";
+        }
 
         const currentVer = verSpan?.textContent?.trim();
         updateStatusEl.textContent = currentVer
@@ -3145,7 +3175,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             if (cur && verSpan) verSpan.textContent = cur;
           }
-          
 
           updateStatusEl.textContent = msg;
         } catch (e) {
@@ -3158,6 +3187,57 @@ document.addEventListener("DOMContentLoaded", async () => {
       });
     }
 
+    // Подписка на прогресс загрузки обновления
+    if (api.onUpdateProgress && updateProgressWrap && updateProgressFill) {
+      api.onUpdateProgress((p: any) => {
+        const rawPercent =
+          typeof p.percent === "number" && isFinite(p.percent)
+            ? p.percent
+            : 0;
+        const percent = Math.max(0, Math.min(100, rawPercent));
+
+        updateProgressWrap.style.display = "block";
+        updateProgressFill.style.width = `${percent.toFixed(0)}%`;
+
+        if (updateProgressLabel) {
+          const totalMB =
+            typeof p.total === "number" && isFinite(p.total)
+              ? p.total / (1024 * 1024)
+              : null;
+          const transferredMB =
+            typeof p.transferred === "number" && isFinite(p.transferred)
+              ? p.transferred / (1024 * 1024)
+              : null;
+
+          const mbPart =
+            totalMB != null && transferredMB != null
+              ? ` (${transferredMB.toFixed(1)} / ${totalMB.toFixed(1)} MB)`
+              : "";
+
+          updateProgressLabel.textContent = `Загрузка обновления: ${percent.toFixed(
+            0
+          )}%${mbPart}`;
+        }
+      });
+    }
+
+    // Подписка на события обновления (available / downloaded / error)
+    if (api.onUpdateEvent && updateStatusEl) {
+      api.onUpdateEvent((ev: any) => {
+        if (!ev || typeof ev !== "object") return;
+
+        if (ev.type === "available") {
+          const v = ev.version ? ` ${ev.version}` : "";
+          updateStatusEl.textContent = `Найдена новая версия${v}, идёт загрузка…`;
+        } else if (ev.type === "downloaded") {
+          const v = ev.version ? ` ${ev.version}` : "";
+          updateStatusEl.textContent = `Обновление${v} загружено. Перезапустите приложение или запустите установку из этого окна.`;
+        } else if (ev.type === "error") {
+          updateStatusEl.textContent =
+            ev.message || "Ошибка при проверке или загрузке обновления.";
+        }
+      });
+    }
 
     // кнопка "Выбрать" путь загрузки
     const pickPathBtn = document.getElementById(

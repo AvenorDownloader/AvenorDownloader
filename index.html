@@ -559,7 +559,13 @@
             <p id="settings-update-status"
             class="settings-hint"
             aria-live="polite"></p>
-       
+            <!-- Progress bar for update downloading -->
+            <div id="update-progress-wrapper" class="update-progress-wrapper hidden">
+              <div class="update-progress-track">
+                <div id="update-progress-fill" class="update-progress-fill"></div>
+              </div>
+              <div id="update-progress-text" class="update-progress-text">0%</div>
+            </div>
           </div>
         </section>
 

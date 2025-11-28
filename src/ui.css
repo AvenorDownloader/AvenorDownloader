@@ -2871,3 +2871,43 @@ button,
   background: linear-gradient(90deg, #ffb347, #ff6961);
   box-shadow: 0 0 10px rgba(255, 105, 97, 0.7);
 }
+
+/* ===== UPDATE PROGRESS BAR ===== */
+
+.update-progress-wrapper {
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  opacity: 1;
+  transition: opacity .25s ease;
+}
+
+.update-progress-wrapper.hidden {
+  opacity: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+.update-progress-track {
+  flex: 1;
+  height: 6px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 6px;
+  overflow: hidden;
+  position: relative;
+}
+
+.update-progress-fill {
+  height: 6px;
+  width: 0%;
+  background: linear-gradient(90deg, #8fff3a, #a3ff5e);
+  border-radius: 6px;
+  transition: width .25s ease;
+}
+
+.update-progress-text {
+  min-width: 40px;
+  font-size: 13px;
+  color: var(--text-muted, #ccc);
+}
