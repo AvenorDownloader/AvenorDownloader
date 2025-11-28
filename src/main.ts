@@ -393,8 +393,6 @@ function createWindow(): BrowserWindow {
     mainWin.webContents.send("win:state", { isMaximized: false })
   );
 
-  mainWin.setMinimumSize(739, 682);
-
   const indexPath = path.join(__dirname, "..", "index.html");
   console.log("[main] loading index from", indexPath);
   mainWin.loadFile(indexPath);
