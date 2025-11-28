@@ -1,0 +1,18 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "module": "CommonJS",
+    "moduleResolution": "Node",
+    "lib": ["ES2020"],
+    "types": ["node", "electron"]
+  },
+  "include": [
+    "src/main.ts",
+    "src/preload.ts",
+    "src/queue.ts",
+    "src/types.ts",
+    "src/compressQueue.ts",
+    "src/convertQueue.ts",
+    "src/licenseService.ts"   // ← вот эта строка
+  ]
+}

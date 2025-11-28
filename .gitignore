@@ -1,0 +1,16 @@
+/node_modules
+/dist
+/coverage
+.DS_Store
+*.log
+/resources/bin/*.log
+assets/con.psd
+# Не храним сборки и инсталляторы
+release/
+*.exe
+
+# Бинарники ffmpeg
+resources/bin/
+
+# Тяжёлое видео для сайта (лучше держать вне репы)
+website/assets/background.mp4

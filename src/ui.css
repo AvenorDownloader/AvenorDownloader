@@ -1,0 +1,2858 @@
+/* ===== CSS-переменные (тёмная фиолетово-розовая тема) ===== */
+
+
+:root{
+  /* базовая палитра */
+  --bg-1: #181818;
+  --text: #e6e8ec;
+  --muted: rgba(230,232,236,.72);
+
+  --accent: #7aa2ff;
+  --accent-2: #c06aff;
+  --danger: #ff3b56;
+
+  --glass-bg: rgba(14,16,24,.38);
+  --glass-bd: rgba(255,255,255,.14);
+  --glass-blur: 20px;
+  --glass-accent: rgba(140,180,255,.22);
+
+  --card-bg: rgba(20,22,30,.55);
+  --card-bd: rgba(255,255,255,.08);
+
+  --radius-lg: 16px;
+  --radius-md: 12px;
+  --radius-sm: 10px;
+
+  --shadow-1: 0 8px 30px rgba(0,0,0,.35);
+  --shadow-2: 0 12px 40px rgba(0,0,0,.45);
+
+  /* градиентный фон */
+  --g1: #1c0e2d;
+  --g2: #3a1451;
+  --g3: #0d2b55;
+  --g4: #071b31;
+
+  /* водяной знак пустой истории */
+  --empty-size: 460px;
+  --empty-size-vw: 46vw;
+  --empty-offset-top: 140px;
+
+  /* шрифт интерфейса */
+  --font-ui: "Montserrat", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+}
+
+button, input, select, textarea {
+  font-family: var(--font-ui);
+}
+
+.topbar.glass{ /* шапка смотрится «дороже» */
+  box-shadow:
+    0 14px 40px rgba(0,0,0,.52),
+    inset 0 1px 0 rgba(255,255,255,.24);
+}
+
+#panel-download .bar.glass{
+  backdrop-filter: blur(calc(var(--glass-blur) + 4px)) saturate(170%);
+  -webkit-backdrop-filter: blur(calc(var(--glass-blur) + 4px)) saturate(170%);
+  box-shadow:
+    0 10px 28px rgba(0,0,0,.44),
+    inset 0 1px 0 rgba(255,255,255,.2);
+}
+
+/* еле заметное «свечение» контура при ховере */
+.glass:hover{
+  box-shadow:
+    0 12px 38px rgba(0,0,0,.5),
+    inset 0 1px 0 rgba(255,255,255,.25),
+    0 0 0 1px rgba(160,190,255,.18);
+  transition: box-shadow .22s ease, filter .22s ease; /* убрали transform из transition */
+}
+
+/* ===== База ===== */
+*{box-sizing:border-box}
+html, body{
+  height: 100%;
+  margin: 0;
+  font-family: var(--font-ui);
+  font-weight: 500;
+  color: var(--text);
+  background: #181818;   /* или твой старый цвет */
+  background-attachment: fixed;
+}
+
+
+
+/* Заголовок-бренд рядом с логотипом — если вернёшь текст */
+.brand { font-weight: 700; }
+
+/* Кнопки и вкладки — делают UI собранным */
+.tab, .btn { font-weight: 600; letter-spacing: .1px; }
+
+/* Мелкие подписи и «мьютед» */
+.muted { font-weight: 500; }
+
+/* Заголовки карточек/титулы */
+.title { font-weight: 600; }
+
+
+/* Звёздная пыль поверх фона */
+.bg-particles{
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;              /* под UI */
+  pointer-events: none;
+  opacity: .16;             /* потише эффекты */
+  mix-blend-mode: screen;
+}
+
+
+
+
+
+.brand{
+  margin: 0;                      /* убираем нижний отступ */
+  display: flex;
+  align-items: center;            /* центр по вертикали */
+  justify-content: flex-start;    /* логотип слева */
+  gap: 10px;
+}
+
+
+.brand-logo{
+  height: 30px;      /* увеличь при желании: 44–56px */
+  width: auto;       /* ширина подстраивается */
+  object-fit: contain;
+  display: block;
+}
+
+.sr-only{
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border: 0;
+}
+
+
+
+.tab{
+  appearance:none; border:none; cursor:pointer;
+  padding: 8px 14px; border-radius: 999px;
+  color: var(--text); background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.08);
+  transition: .18s ease;
+  box-shadow: inset 0 -1px 0 rgba(255,255,255,.06);
+}
+.tab:hover{ filter: brightness(1.08); transform: translateY(-1px); }
+.tab.active{
+  background: linear-gradient(180deg, rgba(192, 255, 140, 0.22), rgba(110,160,255,.14));
+  border-color: rgba(211, 255, 140, 0.35);
+  box-shadow: 0 8px 20px rgba(192, 255, 120, 0.18), inset 0 1px 0 rgba(255,255,255,.25);
+}
+
+/* тонкая панель действий */
+.bar{
+  display:flex; gap:.5rem; align-items:center; padding:10px 12px;
+  margin-top: 6px;
+}
+.muted{ opacity:.7; font-size: .9rem; }
+
+.btn.primary{
+  background: linear-gradient(180deg, rgba(192, 255, 120, 0.3), rgba(110,150,255,.18));
+  border-color: rgba(186, 255, 140, 0.4);
+  box-shadow: 0 8px 24px rgba(185, 255, 120, 0.25);
+}
+.btn.ghost{ background: rgba(255,255,255,.05); }
+.btn:hover{ filter: brightness(1.06); transform: translateY(-1px); }
+.btn:active{ transform: translateY(0); }
+button:disabled{ opacity:.5; cursor:not-allowed; transform:none }
+
+
+/* inputs */
+select,
+input[type="text"],
+input[type="number"]{
+  background: rgba(10,12,18,.65);
+  color: var(--text);
+  border:1px solid rgba(255,255,255,.1);
+  border-radius: 12px;
+  padding: 8px 10px;
+}
+.toggle{ display:flex; align-items:center; gap:8px; padding:4px 8px; border-radius:12px; }
+.toggle input{ accent-color: var(--accent); }
+
+
+/* контейнер контента вкладок */
+.container{
+  width: min(1100px, calc(100% - 24px));
+  margin: 10px auto 40px;
+}
+
+.card:hover{
+  transform: none;           /* без «подпрыгивания» при ховере */
+  box-shadow: none !important;
+}
+
+
+/* сетка карточки */
+.dl-grid{
+  display: grid;
+  grid-template-columns: 76px 1fr auto;
+  column-gap: 14px;
+  align-items: center;
+}
+
+/* контейнер превью */
+.thumb-wrap {
+  background-color: #161616;   /* тот же цвет, что у карточки */
+  border-radius: 10px;         /* как у .job-card */
+  overflow: hidden;            /* обрежет всё, что выступает */
+  padding: 0;                  /* обязательно без паддинга! */
+  border: none;
+}
+
+/* само изображение */
+.thumb {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  background: transparent;
+}
+
+.thumb.thumb--audio {
+  background-image: url("./assets/prewiew-music-icon.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;  /* чуть больше, чтобы края ушли за пределы */
+  
+  /* картинка нам не нужна, используем <img> как контейнер */
+  content: "";
+}
+
+/* на всякий случай убираем src */
+.thumb.thumb--audio[src] {
+  /* Chrome иногда подгружает прозрачный PNG – обнулим */
+  src: none; /* это просто "хак" — можно оставить как есть */
+}
+
+
+.thumb--ph{
+  background: rgba(0,0,0,.2) !important;
+  background-image: none !important;
+  animation: none !important;
+}
+
+@keyframes throb{to{background-position-x:-200%}}
+
+/* В режиме "Добавляем задачу…" вместо заглушки показываем спиннер */
+.thumb-wrap.thumb-wrap--loading{
+  position: relative;
+  background-image: none;   /* отключаем шимер */
+  background: transparent;
+  animation: none;
+}
+
+.thumb-wrap.thumb-wrap--loading::before{
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 28px;          /* размер кружка */
+  height: 28px;         /* квадрат → потом скругляем */
+  margin: -14px 0 0 -14px;  /* сдвиг на половину размера, чтобы центрировать */
+  border-radius: 50%;   /* идеальный круг */
+  border: 2px solid rgba(255,255,255,.18);
+  border-top-color: #ffffff;
+  border-right-color: #ffffff;
+  box-sizing: border-box;
+  animation: pending-spin .8s linear infinite;
+}
+
+
+.thumb-wrap.thumb-wrap--loading .thumb{
+  opacity: 0;
+}
+
+@keyframes pending-spin{
+  to { transform: rotate(360deg); }
+}
+
+/* заголовок и мета */
+.content{ min-width:0 }
+.title{
+  font-weight: 600; white-space: nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+.meta{
+  font-size: .9rem; opacity: .85; margin-top: 6px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+/* прогресс */
+.progress{
+  margin-top: 8px; height: 10px; border-radius: 999px;
+  background: rgba(255,255,255,.08); overflow: hidden; position: relative;
+  border: 1px solid rgba(255,255,255,.08);
+}
+.progress > div{
+  height: 100%; width: 0%;
+  background:
+    linear-gradient(180deg, rgba(120,160,255,.95), rgba(110,150,255,.85));
+
+  /* «жидкая» волна — маской поверх полосы */
+  /* стандартные свойства */
+  mask-image: radial-gradient(16px 8px at 0 50%, #000 35%, transparent 36%),
+              linear-gradient(#000,#000);
+  mask-size: 32px 16px, 100% 100%;
+  mask-repeat: repeat no-repeat;
+  mask-position: 0 0, 0 0;
+
+  /* webkit-дубль для Chromium/WebKit */
+  -webkit-mask-image: radial-gradient(16px 8px at 0 50%, #000 35%, transparent 36%),
+                       linear-gradient(#000,#000);
+  -webkit-mask-size: 32px 16px, 100% 100%;
+  -webkit-mask-repeat: repeat no-repeat;
+  -webkit-mask-position: 0 0, 0 0;
+
+  animation: wave 1.4s linear infinite;
+  transition: width .25s linear;
+}
+@keyframes wave{
+  from{ mask-position: 0 0, 0 0; -webkit-mask-position: 0 0, 0 0; }
+  to  { mask-position: 32px 0, 0 0; -webkit-mask-position: 32px 0, 0 0; }
+}
+
+
+/* indeterminate режим (как было) */
+.progress.indeterminate{
+  position: relative;
+  overflow: hidden;
+}
+.progress.indeterminate > div{
+  width: 40%;
+  position: absolute;
+  left: -40%;
+  animation: indet 1.1s linear infinite;
+  background: linear-gradient(180deg, rgba(140,180,255,.9), rgba(110,150,255,.8));
+
+  /* сброс маски для indeterminate */
+  mask: none;
+  -webkit-mask: none;
+}
+@keyframes indet{ 0%{left:-40%} 100%{left:100%} }
+
+/* действия справа */
+.actions{
+  grid-column: 3; display:flex; align-items:center; justify-content:flex-end; gap:8px;
+}
+.action{
+  background: rgba(255,255,255,.06);
+  color: var(--text);
+  padding: 6px 10px; border-radius: 10px; cursor: pointer;
+  border: 1px solid rgba(255,255,255,.08);
+}
+.action[aria-disabled="true"]{ opacity:.6; pointer-events:none }
+
+/* круглые иконки */
+.icon-btn{
+  width: 34px; height: 34px; border-radius: 50%; padding:0; cursor:pointer;
+  border:1px solid rgba(255,255,255,.1); background: rgba(255,255,255,.06); color:var(--text);
+  display:inline-flex; align-items:center; justify-content:center; transition:.2s ease;
+}
+.icon-btn:hover{ filter:brightness(1.08); box-shadow: 0 0 0 6px rgba(120,160,255,.08); }
+.icon{ width:18px; height:18px }
+
+/* drop-зоны */
+.drop{
+  border: 1px dashed rgba(255,255,255,.18);
+  padding: 16px; border-radius: 12px; cursor:pointer;
+  background: rgba(10,12,18,.55);
+}
+.drop:focus{ outline:2px solid var(--accent); outline-offset:2px; }
+.hidden{
+  position:absolute; width:1px; height:1px; margin:-1px; padding:0; border:0;
+  clip:rect(0 0 0 0); clip-path: inset(50%); overflow:hidden; white-space:nowrap;
+}
+
+/* ряды/отступы */
+.row{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+.seg{ display:flex; align-items:center; gap:8px; }
+.pad{ padding: 8px 12px; }
+
+/* логика вкладок: неактивные не занимают место */
+.panel{ display:none; }
+.panel.active{ display:block; animation: panelIn .22s ease both; }
+
+/* ширина контента вкладок */
+#panel-download, #panel-compress, #panel-convert{
+  width:min(1100px, calc(100% - 24px));
+  margin: 0 auto;
+}
+
+/* лёгкая анимация появления */
+@keyframes panelIn{
+  from{ opacity:0; transform: translateY(6px); }
+  to  { opacity:1; transform: none; }
+}
+
+/* анимации */
+@keyframes cardIn{ from{opacity:0; transform:translateY(6px)} to{opacity:1; transform:none} }
+
+/* ——— ИЗ СТАРОГО (совместимость с renderer) ——— */
+.card.pending{ opacity:.9 }
+
+/* ==== pretty switches (Settings) ==== */
+.switch{
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  user-select: none;
+  line-height: 1;
+  padding: 4px 2px;
+}
+
+.switch input{
+  position: absolute;
+  opacity: 0;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+/* дорожка тумблера — тёмно-серая */
+.switch .track{
+  flex: 0 0 46px;
+  width: 46px;
+  height: 26px;
+  border-radius: 999px;
+  background: #202020;
+  border: 1px solid #343434;
+  box-shadow: inset 0 2px 6px rgba(0,0,0,.5);
+  position: relative;
+  transition: background .22s ease, border-color .22s ease, box-shadow .22s ease;
+}
+
+/* бегунок — светлый нейтральный кружок */
+.switch .knob{
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: linear-gradient(180deg,#f7f7f7,#dcdcdc);
+  box-shadow:
+    0 4px 10px rgba(0,0,0,.45),
+    0 0 0 1px rgba(255,255,255,.5) inset;
+  transition: transform .22s cubic-bezier(.2,.8,.2,1),
+              box-shadow .22s ease,
+              background .22s ease;
+  pointer-events: none;
+}
+
+.switch:hover .track{
+  box-shadow: inset 0 2px 8px rgba(0,0,0,.6);
+}
+
+/* ВКЛ — фирменный салатовый */
+.switch input:checked ~ .track{
+  background: linear-gradient(180deg,#aaf14c,#92d83c);
+  border-color: #92d83c;
+  box-shadow:
+    0 0 0 6px rgba(146,216,60,.25),
+    inset 0 0 0 1px rgba(0,0,0,.55);
+}
+
+/* бегунок с лёгким зелёным свечением */
+.switch input:checked ~ .track .knob{
+  transform: translateX(20px);
+  background: linear-gradient(180deg,#f8ffe8,#d9f87f);
+  box-shadow:
+    0 4px 10px rgba(0,0,0,.45),
+    0 0 0 1px rgba(255,255,255,.6) inset,
+    0 0 12px rgba(146,216,60,.8);
+}
+
+/* фокус по доступности */
+.switch:has(input:focus-visible) .track{
+  outline: 2px solid #92d83c;
+  outline-offset: 3px;
+}
+
+/* подпись справа от тумблера */
+.switch .label{
+  margin-left: 2px;
+  opacity: .92;
+  white-space: nowrap;
+}
+
+
+/* оформление секции настроек для ровных отступов */
+.settings-wrap{ display: grid; gap: 18px; }
+.field > label{ display:block; margin-bottom:8px; opacity:.9; }
+.field .row{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+
+/* поля настроек */
+.settings-wrap .field{ margin: 14px 0; }
+.field > label{ display:block; margin-bottom:8px; opacity:.9; }
+
+/* кнопка-опасность */
+.btn.danger{
+  background: linear-gradient(180deg, rgba(255,80,100,.25), rgba(255,60,80,.18));
+  border-color: rgba(255,90,110,.45);
+  box-shadow: 0 8px 24px rgba(255,90,110,.22);
+}
+.btn.danger:hover{ filter: brightness(1.06); transform: translateY(-1px); }
+
+.field .row .switch{ margin-right:8px; }
+
+.empty-state{
+  position: fixed;          /* поверх фона, но под UI */
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;  /* старт по вертикали */
+  padding-top: var(--empty-offset-top);
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.18;
+  filter: drop-shadow(0 2px 10px rgba(0,0,0,.2));
+}
+
+.empty-state img{
+  max-width: min(var(--empty-size-vw), var(--empty-size));
+  width: 100%;
+  height: auto;
+  user-select: none;
+}
+.hidden{ display: none !important; }
+
+
+
+/* === Premium checkbox (простая, надёжная галочка) === */
+.toggle{
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 12px 6px 44px;
+  border-radius: 14px;
+  background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+  border: 1px solid rgba(255,255,255,.12);
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  box-shadow: 0 8px 22px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.18);
+}
+
+.toggle::before{
+  content:"";
+  position:absolute; left:12px; top:50%; transform:translateY(-50%);
+  width:22px; height:22px; border-radius:6px;
+  background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.04));
+  border:1px solid rgba(255,255,255,.22);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.35), inset 0 -1px 0 rgba(0,0,0,.25);
+}
+
+.toggle::after{
+  /* галочка из двух бордеров, без SVG/масок */
+  content:"";
+  position:absolute; left:18px; top:50%;
+  width:12px; height:7px; transform:translateY(-55%) rotate(-45deg);
+  border-left:3px solid rgba(160,200,255,.95);
+  border-bottom:3px solid rgba(160,200,255,.95);
+  filter: drop-shadow(0 0 4px rgba(140,180,255,.6));
+  opacity:0; transition: opacity .14s ease, transform .14s ease;
+}
+
+.toggle:has(input:checked)::after{
+  opacity:1; transform:translateY(-55%) rotate(-45deg) scale(1.02);
+}
+
+.toggle:has(input:focus-visible){
+  box-shadow:
+    0 0 0 3px rgba(120,160,255,.18),
+    0 8px 22px rgba(0,0,0,.28),
+    inset 0 1px 0 rgba(255,255,255,.18);
+}
+
+.toggle input{
+  position:absolute; inset:0;
+  opacity:0; cursor:pointer;
+}
+
+
+/* === Premium select === */
+.select-wrap{
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  border-radius: 14px;
+  background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+  border: 1px solid rgba(255,255,255,.12);
+  box-shadow: 0 10px 26px rgba(0,0,0,.30), inset 0 1px 0 rgba(255,255,255,.18);
+  overflow: hidden; /* для «чистой» обводки */
+}
+.select-wrap:hover{
+  box-shadow: 0 12px 30px rgba(0,0,0,.36), inset 0 1px 0 rgba(255,255,255,.22);
+}
+
+/* когда включён кастомный дропдаун — скрываем штатную стрелку контейнера */
+.select-wrap.enhanced::after { content: none; }
+
+/* кастомная стрелка */
+.select-wrap::after{
+  content:"";
+  position: absolute; right: 10px; top: 50%;
+  width: 18px; height: 18px; transform: translateY(-50%);
+  opacity: .9; pointer-events: none;
+  background: radial-gradient(120% 100% at 30% 0%, rgba(140,180,255,.8), rgba(140,180,255,.15));
+  mask: url('data:image/svg+xml;utf8,\
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">\
+      <path d="M6 9l6 6 6-6" fill="currentColor"/>\
+    </svg>') center / 16px 16px no-repeat;
+  -webkit-mask: url('data:image/svg+xml;utf8,\
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">\
+      <path d="M6 9l6 6 6-6" fill="currentColor"/>\
+    </svg>') center / 16px 16px no-repeat;
+}
+
+/* сам select — без системной стрелки, прозрачный фон */
+.select-wrap select{
+  appearance: none;
+  -webkit-appearance: none;
+  background: transparent;
+  color: var(--text);
+  border: none;
+  outline: none;
+  padding: 8px 38px 8px 12px;   /* справа место под стрелку */
+  font-weight: 600;
+  border-radius: 14px;          /* чтобы фокус-обводка не ломала форму */
+}
+
+/* focus-ring по контейнеру, когда фокус на select */
+.select-wrap:has(select:focus-visible){
+  box-shadow:
+    0 0 0 3px rgba(120,160,255,.22),
+    0 12px 30px rgba(0,0,0,.36),
+    inset 0 1px 0 rgba(255,255,255,.22);
+}
+
+/* (опционально) стиль элементов в списке — работает частично на Chromium */
+.select-wrap select option{
+  background: #1a1d26;
+  color: #e6e8ec;
+  font-weight: 600;
+}
+
+/* чуть симпатичнее скролл выпадашки (Chromium) */
+select::-webkit-scrollbar{ width: 10px; }
+select::-webkit-scrollbar-thumb{
+  background: rgba(255,255,255,.18);
+  border-radius: 10px;
+  border: 2px solid rgba(0,0,0,0);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.12);
+}
+
+/* триггер (кнопка) */
+.select-wrap{
+  position:relative; display:inline-flex; align-items:center;
+  border-radius:14px; overflow:visible;
+}
+.select-trigger{
+  display:inline-flex; align-items:center; gap:8px;
+  padding:8px 38px 8px 12px;
+  color:var(--text); font-weight:600; border-radius:14px;
+  font-family: var(--font-ui);
+  background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03));
+  border:1px solid rgba(255,255,255,.14);
+  box-shadow: 0 10px 26px rgba(0,0,0,.30), inset 0 1px 0 rgba(255,255,255,.18);
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  cursor:pointer;
+}
+.select-trigger::after{
+  content:"";
+  position:absolute; right:10px; top:50%; transform:translateY(-50%);
+  width:18px; height:18px;
+  background: radial-gradient(120% 100% at 30% 0%, rgba(140,180,255,.85), rgba(140,180,255,.20));
+  -webkit-mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" fill="currentColor"/></svg>') center/16px 16px no-repeat;
+          mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" fill="currentColor"/></svg>') center/16px 16px no-repeat;
+  pointer-events:none; opacity:.95;
+}
+
+/* всплывающий список */
+.select-menu{
+  position:absolute; left:0; top:calc(100% + 8px); min-width: 180px;
+  background: linear-gradient(180deg, #202020, rgba(255,255,255,.04));
+  border: 1px solid #202020;
+  box-shadow: 0 16px 44px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.18);
+  backdrop-filter: blur(16px) saturate(160%);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  border-radius: 14px; padding: 6px; z-index: 20;
+  display:none;
+}
+.select-menu.open{ display:block; animation: menuIn .12s ease both; }
+@keyframes menuIn{ from{opacity:0; transform:translateY(-6px)} to{opacity:1; transform:none} }
+
+.select-option{
+  padding:8px 10px; border-radius:10px; cursor:pointer;
+  color:var(--text);
+}
+.select-option:hover,
+.select-option[aria-selected="true"]{
+  background: linear-gradient(180deg, rgba(140,180,255,.22), rgba(110,150,255,.12));
+  border: 1px solid rgba(140,180,255,.35);
+}
+.select-divider{ height:6px; }
+
+/* прячем нативный select, чтобы не мешал */
+.select-wrap > select{
+  position:absolute; inset:0; width:100%; height:100%;
+  opacity:0; pointer-events:none;
+}
+
+
+
+
+.tab{
+  padding: 7px 12px;
+  border-radius: 12px;
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.10);
+  box-shadow: none;
+  transition: background .15s ease, border-color .15s ease, transform .12s ease;
+}
+.tab:hover{ transform: translateY(-1px); background: rgba(255,255,255,.07); }
+.tab.active{
+  background: rgba(255,255,255,.08);
+  border-color: rgba(255,255,255,.16);
+}
+
+/* Кнопки — меньше блеска, более «системные» */
+.btn{
+  padding: 7px 11px;
+  border-radius: 12px;
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.12);
+  box-shadow: none;
+}
+.btn.primary{
+  background: #2a2a2a;                 /* ровный тёмно-серый */
+  border-color: rgba(255,255,255,.18);
+  box-shadow: none;
+  background-image: none;
+}
+
+.btn.ghost{ background: rgba(255,255,255,.04); }
+.btn:hover{ filter: none; transform: translateY(-1px); }
+.btn:active{ transform: translateY(0); }
+
+/* Тумблер аудио — тоньше свет */
+.toggle{
+  background: rgba(255,255,255,.05);
+  border-color: rgba(255,255,255,.12);
+  box-shadow: none;
+}
+.toggle::before{
+  background: rgba(255,255,255,.06);
+  border-color: rgba(255,255,255,.16);
+  box-shadow: none;
+}
+.toggle::after{ filter: none }
+
+/* Карточки — строгие */
+.card{
+  background: var(--card-bg);
+  border: 1px solid var(--card-bd);
+  box-shadow: var(--shadow-1);
+  transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+}
+.card:hover{ transform: translateY(-1px); box-shadow: var(--shadow-2); }
+
+/* Прогресс — без «волны», спокойный */
+.progress{
+  height: 8px;
+  border-radius: 10px;
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.08);
+}
+.progress > div{
+  background: linear-gradient(180deg, #9fb8ff, #85a6ff);
+  -webkit-mask: none; mask: none;          /* отключаем волну */
+  animation: none;
+}
+.progress.indeterminate > div{
+  background: linear-gradient(180deg, #9fb8ff, #85a6ff);
+}
+
+/* Иконки-кнопки — спокойные контуры */
+.icon-btn{
+  width: 32px; height: 32px;
+  border: 1px solid rgba(255,255,255,.14);
+  background: rgba(255,255,255,.05);
+  box-shadow: none;
+}
+.icon-btn:hover{ box-shadow: none; transform: translateY(-1px); }
+
+/* Выпадающий select — строгий акрил */
+.select-wrap{
+  border-radius: 12px;
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.14);
+  box-shadow: none;
+}
+.select-trigger{
+  border-radius: 12px;
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.14);
+  box-shadow: none;
+  padding: 8px 36px 8px 12px;
+}
+.select-trigger::after{
+  background: currentColor;
+  opacity: .7;
+}
+.select-menu{
+  border-radius: 12px;
+  background: rgba(18,22,30,.78);
+  border: 1px solid rgba(255,255,255,.14);
+  box-shadow: 0 12px 32px rgba(0,0,0,.45);
+  padding: 6px;
+}
+.select-option{
+  border: 1px solid transparent;
+  border-radius: 10px;
+}
+.select-option:hover,
+.select-option[aria-selected="true"]{
+  background: rgba(255,255,255,.08);
+  border-color: rgba(255,255,255,.14);
+}
+
+/* Список и панель — чуть уже, аккуратней отступы */
+.container{ width: min(1040px, calc(100% - 24px)); }
+.bar{ gap: .5rem; padding: 8px 10px; }
+
+/* Частицы — заметно тише */
+.bg-particles{ opacity:.16; mix-blend-mode: screen; }
+
+
+.topbar-inner {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; /* логотип слева, вкладки по центру через flex-trick */
+  position: relative;
+}
+
+.topbar-right {
+  margin-left: auto;              /* прижимаем к правому краю */
+  display: flex;
+  align-items: center;
+}
+
+/* логотип */
+.brand {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+/* вкладки — без подложки, только центрирование */
+.tabs {
+  position: absolute;
+  left: 50%;
+  top: 50%;                           /* центр по вертикали */
+  transform: translate(-50%, -50%);   /* по X и по Y */
+
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  background: transparent;
+  border-radius: 0;
+  padding: 0;
+  border: none;
+}
+
+
+
+/* сами кнопки */
+.tab {
+  appearance: none;
+  border: 0;
+  cursor: pointer;
+  background: transparent;
+  color: var(--text);
+  padding: 9px 18px;
+  border-radius: 999px;
+  font-weight: 600;
+  line-height: 1;
+  transition: background 0.15s ease, color 0.15s ease; /* убрали transform из transition */
+}
+.tab:hover {
+  background: rgba(255, 255, 255, 0.08);
+  /* строку transform: translateY(-1px); — удалить */
+}
+
+.tab.active {
+  background: #ffffff;
+  color: #161616;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+
+/* ===== Download controls capsule (вторая панель) ===== */
+.bar.capsule{
+  background: #1f1f1f;           /* как у .tabs */
+  border: 1px solid #2a2a2a;     /* как у .tabs */
+  border-radius: 999px;          /* как у .tabs */
+  box-shadow: none;
+  padding: 8px 18px;
+  display: flex;
+  align-items: center;
+  gap: 6px;                      /* как у .tabs */
+
+  /* центрируем и не растягиваемся на всю ширину */
+  width: fit-content;
+  max-width: calc(100% - 24px);
+  margin: 10px auto 0;
+}
+
+/* ОДИНАКОВАЯ ВЫСОТА КАПСУЛ ДЛЯ "СКАЧАТЬ" И "СЖАТЬ" */
+.bar.capsule,
+#panel-compress .compress-bar {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  min-height: 52px;        /* можно 50–56 по вкусу */
+  align-items: center;
+}
+
+/* Внутренние элементы "Сжать" той же высоты, что и в "Скачать" */
+#panel-compress .input-file-pill,
+#panel-compress .compress-size-input-wrap,
+#panel-compress #startCompress,
+#panel-compress #pickFolderCompress {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+/* кнопки внутри капсулы — «чипсы» */
+.bar.capsule .btn{
+  background: transparent;
+  border: 0;
+  padding: 10px 14px;
+  border-radius: 999px;
+  box-shadow: none;
+}
+.bar.capsule .btn:hover{ background: rgba(255,255,255,.08); transform: translateY(-1px); }
+.bar.capsule .btn.primary{
+  background: #fff;
+  color: #161616;
+  border: 0;
+  box-shadow: 0 1px 2px rgba(0,0,0,.2);
+}
+.bar.capsule .btn.ghost{ background: rgba(255,255,255,.06); color: var(--text); }
+
+/* переключатель «Скачать аудио» — в стиле капсулы */
+.bar.capsule .toggle{
+  background: transparent;
+  border: 0;
+  padding: 8px 12px 8px 40px;  /* чуть компактнее */
+  border-radius: 999px;
+  box-shadow: none;
+}
+.bar.capsule .toggle::before{
+  border-radius: 6px;
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.16);
+}
+.bar.capsule .toggle::after{
+  border-left-color: rgba(140,180,255,.95);
+  border-bottom-color: rgba(140,180,255,.95);
+}
+
+/* select — как чип, без лишнего блеска */
+.bar.capsule .select-wrap{
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  border-radius: 999px;
+}
+.bar.capsule .select-trigger{
+  background: #2a2a2a;              /* тот же сплошной цвет, что у "Сохранить в..." */
+  border: 1px solid #2a2a2a;
+  border-radius: 999px;
+  padding: 10px 36px 10px 14px;
+  box-shadow: none;
+  color: #f5f5f5;                   /* текст как на серой кнопке */
+}
+
+.bar.capsule .select-menu{
+  background: rgba(18,22,30,.88);
+  border: 1px solid rgba(255,255,255,.14);
+  border-radius: 12px;
+  box-shadow: 0 12px 32px rgba(0,0,0,.45);
+}
+
+/* подпись пути — делаем тише и не ломаем капсулу */
+.bar.capsule #savePath{
+  opacity: .7;
+  padding: 0 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 28ch;
+}
+.bar.capsule #savePath:empty{
+  display: none;
+}
+
+/* Новый общий стиль «пилюли» для баров */
+.bar.glass.pill {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  background: rgba(255,255,255,0.06);       /* как у топ-бара */
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 22px;                      /* скругление как на рефе */
+  box-shadow: 0 6px 18px rgba(0,0,0,0.25);  /* без синего свечения */
+}
+
+/* Если где-то остался старый subtle — убери «синюю» подсветку */
+.bar.subtle {
+  box-shadow: none;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+/* PasteBtn: стиль как у кнопки "Сжать" */
+#panel-download #pasteBtn {
+  padding: 10px 22px;
+  border-radius: 999px;
+  border: none;
+
+  background: #92d83c;
+  color: #181818;
+  font-weight: 600;
+  font-size: 13px;
+  box-shadow: 0 10px 22px rgba(146, 216, 60, 0.55);
+}
+
+#panel-download #pasteBtn:hover {
+  background: #a3e34e;
+  transform: translateY(-1px);
+  filter: none;
+}
+
+#panel-download #pasteBtn:active {
+  transform: translateY(0);
+  box-shadow: 0 6px 16px rgba(146, 216, 60, 0.45);
+}
+
+
+/* Меню выбора качества: компакт и тёмно-серый */
+.bar.capsule .select-menu{
+  background: #202020;   /* ← фон */
+  color: #F9F7F8;        /* ← цвет текста в меню */
+  border: 1px solid #4A4A4A;
+  min-width: 200px;
+  padding: 4px;
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0,0,0,.45);
+}
+
+/* Пункты списка */
+.bar.capsule .select-option{
+  color: #F9F7F8;        /* ← цвет текста пунктов */
+  font-size: 14px;
+  line-height: 1.15;
+  padding: 8px 10px;
+  border-radius: 8px;
+}
+
+/* Ховер и выбранный пункт */
+.bar.capsule .select-option:hover,
+.bar.capsule .select-option[aria-selected="true"]{
+  background: #2c2c2c;   /* ← фон наведения/выбранного */
+  border: 1px solid #2c2c2c;
+}
+
+/* ===== Download: панель фильтров/сортировки ===== */
+.dl-toolbar{
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  padding: 0 8px;            /* можно 0, если нужен прям ровный верх */
+  margin-top: 8px;           /* оставить чуть воздуха от верхних кнопок */
+}
+
+.dl-toolbar::before,
+.dl-toolbar::after{
+  content: none !important;  /* на случай декоративных слоёв */
+}
+
+/* если у внутренних контейнеров был свой фон */
+.dl-toolbar .bar,
+.dl-toolbar .inner,
+.dl-toolbar .wrap{
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.dl-cats{ display:flex; gap:14px; padding-left:6px; }
+.dl-cat{
+  appearance:none; border:0; background:transparent; cursor:pointer;
+  color: var(--text); opacity:.92; font-weight:600;
+  padding:10px 2px; position:relative;
+}
+.dl-cat.active{ opacity:1; }
+.dl-cat.active::after{
+  content:""; position:absolute; left:0; right:0; bottom:6px;
+  height:2px; border-radius:2px; background:#ACFD4B; /* фирменная линия */
+}
+
+/* правая сторона */
+.dl-right{ display:flex; align-items:center; gap:12px; }
+.dl-count{ opacity:.9; }
+
+/* сортировка */
+.dl-sort .sort-trigger{
+  height: 36px;
+  min-width: 36px;
+  padding: 0 10px;
+  border-radius: 10px;
+  background: #2a2a2a;
+  color: #eaeaea;
+  border: 1px solid #2a2a2a;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.sort-menu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+  min-width: 200px;
+  padding: 4px;
+  border-radius: 10px;
+  background: #202020;              /* тот же фон, что у списка качества */
+  color: #F9F7F8;                   /* цвет текста */
+  border: 1px solid #4A4A4A;        /* рамка */
+  box-shadow: 0 8px 24px rgba(0,0,0,.45); /* мягкая тень */
+  display: none;
+  z-index: 20;
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+}
+.sort-menu .sort-opt {
+  color: #F9F7F8;
+  font-size: 14px;
+  line-height: 1.15;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  cursor: pointer;
+}
+.sort-opt:hover, .sort-opt[aria-selected="true"]{
+  background:#454545; border:1px solid #5A5A5A;
+}
+.sort-menu .divider{ height:6px; }
+
+@keyframes menuIn{ from{opacity:0; transform:translateY(-6px)} to{opacity:1; transform:none} }
+
+/* кнопки категорий остаются как есть; подчёркивание — без фона */
+.dl-toolbar .dl-cat{
+  background: transparent;
+}
+
+/* Панель фильтров */
+.dl-toolbar{
+  display:flex;
+  align-items:center;
+  gap:16px;
+  background:transparent;
+  border:0;
+  box-shadow:none;
+}
+
+/* Левая группа (категории) */
+.dl-toolbar .dl-cats{
+  display:flex;
+  align-items:center;
+  gap:18px;
+}
+
+/* Правая группа — уходит к правому краю */
+.dl-toolbar .dl-right{
+  margin-left:auto;            /* ← прижим к правому краю */
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+/* косметика */
+#dl-count{ opacity:.9; font-weight:600; }
+#dl-sort-trigger.icon-btn{ width:32px; height:32px; }
+
+/* На узких экранах — перенос в две строки */
+@media (max-width: 640px){
+  .dl-toolbar{ flex-wrap:wrap; gap:10px; }
+  .dl-toolbar .dl-right{ margin-left:0; width:100%; justify-content:flex-end; }
+}
+
+/* === Sort menu — compact like Quality select === */
+.dl-sort .sort-trigger{
+  height: 36px;
+  min-width: 36px;
+  padding: 0 10px;
+  border-radius: 10px;
+  background: #2a2a2a;
+  color: #eaeaea;
+  border: 1px solid rgba(255,255,255,.08);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sort-menu{
+  position: absolute;
+  right: 0;
+  margin-top: 8px;
+  /* размеры как у меню качества */
+  min-width: 220px;        /* было больше — уменьшили */
+  padding: 8px;            /* компактнее */
+  border-radius: 12px;
+  background: #202020;     /* как просил для меню */
+  border: 1px solid rgba(255,255,255,.08);
+  box-shadow: 0 6px 24px rgba(0,0,0,.35);
+  display: none;
+  z-index: 20;
+  font-size: 14px;         /* как в селекте качества */
+  line-height: 1.15;
+}
+
+.sort-menu.open {
+  display: block;
+  animation: menuIn .12s ease both;
+}
+
+.sort-menu .sort-opt{
+  padding: 8px 12px;       /* как у опций качества */
+  border-radius: 8px;
+  color: #f0f0f0;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.sort-menu .sort-opt:hover,
+.sort-menu .sort-opt[aria-selected="true"] {
+  background: #2c2c2c;
+  border: 1px solid #2c2c2c;
+}
+
+.sort-menu .divider {
+  height: 6px;
+  background: transparent;
+}
+
+.select-menu{
+  background: #202020;
+  border: 1px solid rgba(255,255,255,.08);
+}
+
+
+/* Внутренний скроллируемый слой, чтобы тень/рамка оставались статичны */
+.dl-scroll{
+  position: relative;
+  height: clamp(360px, 58vh, 620px);  /* адаптивная высота как на рефе */
+  overflow: auto;                     /* скроллим карточки внутри */
+  border-radius: 18px;
+}
+
+/* Список карточек внутри бокса */
+.dl-list{
+  padding: 8px 8px 14px;
+}
+
+/* Карточки визуально чуть отступают от краёв */
+.dl-list .card{
+  margin-left: 2px;
+  margin-right: 2px;
+}
+
+/* Водяной знак — центрируем внутри бокса */
+.dl-empty{
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  opacity: .20;
+}
+.dl-empty img{
+  width: 80px;              /* подгони число под размер иконки "Скачать" */
+  max-width: 80px;
+  height: auto;
+  filter: drop-shadow(0 2px 10px rgba(0,0,0,.25));
+}
+
+
+/* Когда есть карточки — скрыто (renderer уже управляет классом .hidden) */
+.dl-empty.hidden{ display: none !important; }
+
+/* Убираем прежнюю «фиксированную» раскладку empty-state в этой панели */
+#panel-download .empty-state{ position: static; inset: auto; }
+
+/* Когда задача завершена — полосу прогресса скрываем */
+.job-card.done .progress{ display: none !important; }
+
+/* Кнопка удаления в «Готово»: круг остаётся нейтральным, красим только иконку */
+.job-card.done .actions .icon-btn[data-delete]{
+  color: #a71f31;                    /* красим саму иконку */
+  background: rgba(255,255,255,.06); /* прежний фон-кружок */
+  border: 1px solid rgba(255,255,255,.10);
+}
+.job-card.done .actions .icon-btn[data-delete]:hover{
+  background: rgba(255,59,86,.10);   /* лёгкий намёк на красный при ховере */
+  border-color: rgba(255,59,86,.25);
+}
+
+/* === Fix: мягкая рамка контейнера, больше воздуха, без «двойных» линий === */
+
+
+/* Скролл-слой — даём внутренние поля, чтобы карточки не липли к краям */
+.dl-scroll{
+  border-radius: 16px;
+  overflow: auto;
+  padding: 8px 8px 14px;                         /* новый внутренний отступ */
+}
+
+/* Список карточек: управляем зазорами одной настройкой */
+.dl-list{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;                                     /* «воздух» между карточками */
+  padding: 0;                                    /* паддинги берём у .dl-scroll */
+}
+
+/* У карточек делаем более мягкий контур и отключаем «вторую» линию */
+.dl-list .card{
+  border: 1px solid rgba(255,255,255,.05) !important;  /* мягкий контур */
+  box-shadow: none !important;
+  margin: 0 4px;                                       /* чуть отступаем от боков */
+  background: #161616 !important;
+}
+
+/* --- История скачек: отступы, чтобы карточка не прилипала к краям --- */
+.dl-box {                    /* сам «контейнер истории» */
+  padding: 0;               /* внешний padding убираем */
+  margin-top: 12px;         /* отступ от тулбара сверху */
+}
+
+.dl-box > .dl-scroll {       /* внутренний прокручиваемый слой */
+  padding: 16px 16px 20px;  /* ← главный воздух внутри бокса */
+  border-radius: 16px;
+  overflow: auto;
+}
+
+/* ----- Лимит Free: полоска прогресса ----- */
+
+.dl-box > .free-limit-bar {
+  padding: 10px 16px 0;              /* выравниваем по отступам карточек */
+}
+
+.free-limit-track {
+  width: 100%;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06); /* можно чуть затемнить/осветлить по вкусу */
+  box-shadow: none;                       /* убрали чёрную обводку и зелёное свечение */
+  overflow: hidden;
+  position: relative;
+}
+
+.free-limit-fill {
+  height: 100%;
+  border-radius: inherit;
+  background: #92d83c;          /* дефолт — зелёный */
+  transition: width 0.25s ease, /* чтобы плавно заполнялась */
+              background 0.25s ease; /* и цвет плавно менялся */
+}
+
+
+
+
+/* список карточек: небольшой внутренний «зазор» */
+.dl-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;                /* расстояние между карточками */
+  padding: 0 4px;           /* небольшой горизонтальный зазор от стенок */
+}
+
+/* каждая карточка: не прилипать к стенкам и сверху/снизу */
+.dl-list .card {
+  margin: 4px 0;            /* вертикальный зазор */
+  border-radius: 14px;
+}
+
+/* страхуемся: у первой/последней чуть больше воздуха от краёв */
+.dl-list .card:first-child { margin-top: 8px; }
+.dl-list .card:last-child  { margin-bottom: 8px; }
+
+/* === CARD LAYOUT FIX: воздух внутри карточки === */
+
+/* внутренняя сетка карточки */
+.dl-list .card > .dl-grid{
+  display: grid;
+  grid-template-columns: auto 1fr auto; /* превью — контент — экшены */
+  align-items: center;
+  column-gap: 16px;                      /* ← воздух слева/справа между зонами */
+  row-gap: 8px;                          /* ← воздух по вертикали */
+  padding: 14px 16px;                    /* ← главный внутренний отступ карточки */
+}
+
+/* превью не прилипает к краю карточки */
+.dl-list .card .thumb-wrap{
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+/* контент-колонка: заголовок, прогресс, мета не слипаются */
+.dl-list .card .content{
+  display: flex;
+  flex-direction: column;
+  gap: 8px;                              /* ← расстояние между title / progress / meta */
+}
+
+/* прогресс — отступы, чтобы не прилипал к границам контента */
+.dl-list .card .progress{
+  height: 6px;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+/* панель действий справа — зазоры между кнопками и «Открыть в папке» */
+.dl-list .card .actions{
+  display: flex;
+  align-items: center;
+  gap: 10px;                             /* ← воздух между X, корзиной и кнопкой */
+}
+
+/* сама кнопка «Открыть в папке» — внутренний пэддинг */
+.dl-list .card .actions .action[data-open]{
+  padding: 8px 12px;
+  border-radius: 10px;
+}
+
+/* === Компактная карточка загрузки (вертикально ниже) === */
+.dl-list .card > .dl-grid{
+  padding: 8px 14px;   /* было 14px 16px */
+  row-gap: 4px;        /* было 8px */
+  column-gap: 12px;    /* можно оставить 16px, если не нужно ужимать по ширине */
+}
+
+.dl-list .card .thumb-wrap{
+  width: 44px;
+  height: 44px;        /* меньше превью → ниже карточка */
+}
+
+.dl-list .card .content{
+  gap: 4px;            /* расстояние между title/progress/meta */
+}
+
+.dl-list .card .title{
+  font-size: 14px;
+  line-height: 1.2;    /* компактнее заголовок */
+}
+
+.dl-list .card .meta{
+  font-size: 12px;
+  line-height: 1.2;    /* компактнее подпись */
+}
+
+.dl-list .card .progress{
+  height: 4px;         /* было 6px */
+  border-radius: 4px;
+}
+
+.dl-list .card .actions{
+  gap: 8px;            /* поменьше зазоры между кнопками */
+}
+.dl-list .card .icon-btn{
+  width: 28px;
+  height: 28px;        /* уменьшить круглые иконки */
+}
+.dl-list .card .actions .action[data-open]{
+  padding: 6px 10px;   /* компактнее кнопка справа */
+}
+
+/* --- Превью карточки строго 16:9 --- */
+.dl-list .card .thumb-wrap{
+  width: 96px;              /* выбери размер: 96, 88, 80 — как нужно по макету */
+  aspect-ratio: 16 / 9;     /* ключ к формату 16:9 */
+  height: auto;             /* сбивает старое фиксированное значение */
+  flex: 0 0 96px;           /* тот же размер в сетке */
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.dl-list .card .thumb{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;         /* заполняем контейнер без искажений */
+}
+
+/* Для плейсхолдера-иконки не обрезаем */
+.dl-list .card .thumb.thumb--ph{
+  object-fit: contain;
+  background: rgba(255,255,255,.03);
+}
+
+/* === Типографика: единый вид для вкладок, кнопок, фильтров, меню === */
+.tab,
+.btn,
+.select-wrap select,
+.dl-cat,
+.dl-count,
+.sort-menu .sort-opt,
+.action {
+  font-weight: 600;
+  letter-spacing: .2px;
+}
+
+/* Карточки оставляем чуть легче, чтобы не «орали» */
+.dl-list .card .title { font-weight: 600; }
+.dl-list .card .meta  { font-weight: 500; }
+
+
+/* вкладки/кнопки/фильтры — делаем читабельнее */
+.tabs .tab,
+.bar .btn,
+.select-wrap select,
+.dl-cats .dl-cat,
+.sort-trigger,
+.sort-menu .sort-opt,
+.group-button,
+.action{
+  font-family: var(--font-ui);
+  font-weight: 600;
+  letter-spacing: .2px;
+}
+
+/* карточки: заголовок плотнее, мета — помягче */
+.dl-list .card .title{ font-weight: 600; }
+.dl-list .card .meta{  font-weight: 500; }
+
+/* счётчик элементов можно оставить 600, чтобы совпадал по «аккуратности» */
+.dl-count,
+.dl-count.muted,
+#dl-count {
+  font-weight: 600;
+  font-size: 14px;   /* тот же размер, что и вкладки */
+}
+.dl-cats .dl-cat {
+  font-size: 14px;
+}
+
+
+
+
+/* самое главное — применить к select + option */
+select,
+.select-wrap select,
+.select-wrap option,
+option {
+  font-family: var(--font-ui) !important;
+  font-weight: 600;           /* чтобы выглядело как кнопки/вкладки */
+  letter-spacing: .2px;
+}
+
+/* убрать нативный скин, чтобы браузер не подменял отрисовку */
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+/* История скачиваний: контейнер без обводки */
+.dl-box{
+  border: none !important;
+  box-shadow: none !important;      /* если обводка рисовалась через тень */
+  background: var(--bg-2);          /* сюда — желаемый цвет фона контейнера */
+}
+
+/* На всякий случай гасим псевдо-слои, если тонкая линия рисовалась через них */
+.dl-box::before,
+.dl-box::after{
+  display: none !important;
+  content: none !important;
+}
+
+/* Внутренняя прокрутка — чтобы не было второй рамки */
+.dl-scroll{
+  border: none !important;
+  box-shadow: none !important;
+  background: transparent;          /* или свой цвет, если нужен */
+}
+
+/* Плашка пустого состояния — фон/радиус (если нужно подправить стиль) */
+.dl-empty{
+  background: #2e2e2e;              /* подбери под свой фон */
+  border: none;
+  box-shadow: none;
+}
+
+/* чтобы меню сортировки перекрывало список */
+.dl-toolbar { 
+  position: relative;
+  z-index: 20;               /* выше контейнера с карточками */
+}
+
+.dl-box {
+  position: relative;
+  z-index: 1;                /* слой ниже тулбара */
+}
+
+/* сам блок сортировки — якорь для абсолютного меню */
+.dl-sort {
+  position: relative;
+}
+
+/* выпадающее меню */
+.sort-menu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+  z-index: 1000;             /* поверх всего внутри тулбара */
+  /* на всякий случай */
+  pointer-events: auto;
+}
+
+/* если где-то стоит overflow скрывающий меню — выключаем для тулбара */
+.dl-toolbar,
+.dl-right {
+  overflow: visible !important;
+}
+
+/* пустое состояние не должно рисовать свой фон */
+.dl-empty{
+  background: transparent !important;
+}
+
+/* === Download box: без обводки/тени, но с мягкой подложкой === */
+#panel-download .dl-box{
+  background: rgba(255,255,255,.04) !important; /* едва заметная «плита» */
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 22px;
+  padding: 12px; /* оставим внутренний отступ */
+}
+
+/* Внутренний скролл-слой – прозрачный, без рамок/теней */
+#panel-download .dl-scroll{
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 16px;
+
+  /* фиксированная область истории со скроллом */
+  overflow: auto;
+  height: clamp(360px, 58vh, 620px);
+}
+
+
+
+/* Псевдо-слои на всякий случай глушим */
+#panel-download .dl-box::before,
+#panel-download .dl-box::after{
+  content: none !important;
+}
+
+/* Пустое состояние — без своего фона */
+#panel-download .dl-empty{ background: transparent !important; }
+
+
+/* === Download: уплотняем отступы в контейнере истории === */
+#panel-download .dl-scroll{
+  /* было ~16px сверху — делаем компактнее */
+  padding: 10px 12px 14px !important;   /* top | left/right | bottom */
+}
+
+#panel-download .dl-list{
+  gap: 8px !important;                  /* было 10px — меньше расстояние между карточками */
+  padding: 0 2px !important;            /* чуть ближе к стенкам */
+}
+
+/* сами карточки — ещё на шажок компактнее */
+#panel-download .dl-list .card{
+  margin: 2px 0 !important;             /* было 4px */
+}
+
+/* первый/последний элементы не «висят» далеко от краёв */
+#panel-download .dl-list .card:first-child{ margin-top: 4px !important; }
+#panel-download .dl-list .card:last-child { margin-bottom: 4px !important; }
+
+/* (опционально) контент карточки — чутка плотнее по вертикали
+#panel-download .dl-list .card > .dl-grid{ padding: 8px 12px !important; }
+*/
+
+/* ===== Глобальные скролл-бары (Chromium/Electron) ===== */
+*::-webkit-scrollbar{
+  width: 8px;                 /* тонкая полоса */
+  height: 8px;
+}
+
+*::-webkit-scrollbar-track{
+  background: transparent;    /* без «канавки» */
+}
+
+*::-webkit-scrollbar-thumb{
+  background: #0f0f0f;        /* твой цвет */
+  border-radius: 999px;       /* полностью округлённая */
+  border: 2px solid transparent;      /* узкая, без бликов */
+  background-clip: padding-box;       /* чтобы не прилипала к краям */
+}
+
+*::-webkit-scrollbar-thumb:hover{
+  background: #141414;        /* едва светлее на ховере */
+}
+
+*::-webkit-scrollbar-corner{
+  background: transparent;
+}
+
+/* История: можно сделать ЕЩЁ тоньше именно в списке */
+.dl-scroll::-webkit-scrollbar{
+  width: 6px;
+}
+
+
+/* Единый UI-вес */
+.tab,
+.btn,
+.select-wrap select,
+.dl-cats .dl-cat,
+.sort-trigger,
+.sort-menu .sort-opt,
+.action,
+.dl-count {
+  font-family: var(--font-ui);
+  font-weight: 600;
+  letter-spacing: .2px;
+  opacity: 1; /* ни у кого не «тусклее» по умолчанию */
+}
+
+/* Заголовок/мета в карточках */
+.dl-list .card .title { font-weight: 600; }
+.dl-list .card .meta  { font-weight: 500; }
+
+/* Прячем любую кнопку/иконку с подсказкой "Развернуть" */
+[title="Развернуть"] { display: none !important; }
+
+/* На всякий случай — если это details/summary-маркер */
+details > summary::-webkit-details-marker { display: none !important; }
+details > summary { list-style: none !important; }
+
+/* И типовые "..." */
+.more-btn, .ellipsis, .expand { display: none !important; }
+
+/* Topbar — едет вверх вместе со страницей */
+.topbar {
+  position: relative;          /* или можно вообще убрать, но так надёжнее */
+  top: auto;
+  z-index: 1;
+  width: min(1100px, calc(100% - 24px));
+  margin: 16px auto 10px;
+  padding: 8px 10px;
+
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+
+/* Тулбар/история для «Сжать» – оставляем те же, просто переносим ниже */
+
+#panel-compress .dl-box {
+  background: rgba(255, 255, 255, 0.04) !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 22px;
+  width: min(1100px, calc(100% - 24px));
+  margin: 12px auto 28px;
+  padding: 12px;
+}
+
+#panel-compress .dl-scroll {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 16px;
+  padding: 10px 12px 14px;
+
+  overflow: auto;
+  height: clamp(360px, 58vh, 620px);
+}
+
+
+
+#panel-compress .dl-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0 2px;
+}
+
+#panel-compress .dl-list .card {
+  margin: 2px 0;
+}
+
+/* тулбар фильтров для "Сжать" — такой же, как в "Скачать" */
+.compress-toolbar {
+  width: min(1100px, calc(100% - 24px));
+  margin: 8px auto 0;
+}
+
+/* Тулбар/история для «Конвертировать» – те же настройки */
+
+#panel-convert .dl-box {
+  background: rgba(255, 255, 255, 0.04) !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 22px;
+  width: min(1100px, calc(100% - 24px));
+  margin: 12px auto 28px;
+  padding: 12px;
+}
+
+#panel-convert .dl-scroll {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 16px;
+  padding: 10px 12px 14px;
+
+  overflow: auto;
+  height: clamp(360px, 58vh, 620px);
+}
+
+
+
+#panel-convert .dl-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0 2px;
+}
+
+#panel-convert .dl-list .card {
+  margin: 2px 0;
+}
+
+/* тулбар фильтров для "Конвертировать" */
+.convert-toolbar {
+  width: min(1100px, calc(100% - 24px));
+  margin: 8px auto 0;
+}
+
+/* ===== ВКЛАДКА "СЖАТЬ": ЧИСТАЯ КАПСУЛА ===== */
+
+/* внутренняя bar во вкладке "Сжать" сама ничего не рисует */
+#panel-compress .bar{
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+/* основная капсула */
+#panel-compress .compress-bar{
+  display: flex;
+  align-items: center;
+  gap: 15px;  /* ОДИНАКОВЫЙ зазор между всеми элементами */
+
+  width: min(1100px, calc(100% - 24px));
+  margin: 10px auto 0;
+  padding: 8px 12px;
+
+  background: #1f1f1f;
+  border: 1px solid #2a2a2a;
+  border-radius: 999px;
+  box-shadow: none;
+}
+
+/* все прямые дети капсулы: одна высота, без margin */
+#panel-compress .compress-bar > *{
+  margin: 0 !important;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+
+/* ===== "Файл не выбран" ===== */
+
+.input-file-pill{
+  flex: 1 1 auto;     /* тянется, занимает свободное место */
+  min-width: 0;
+  padding: 0 20px;
+  border-radius: 999px;
+  border: 1px dashed rgba(255,255,255,.28);
+  background: #151515;
+  cursor: pointer;
+
+  display: inline-flex;
+  align-items: center;
+}
+
+
+#panel-compress .input-file-pill__label{
+  font-size: 14px;
+  color: rgba(255,255,255,.80);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ===== "Размер на выходе" ===== */
+
+#panel-compress .compress-size-group{
+  flex: 0 0 auto;
+}
+
+#panel-compress .compress-size-input-wrap{
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+
+  height: 36px;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: #151515;
+  border: 1px solid rgba(255,255,255,.16);
+}
+
+#panel-compress .compress-size-input{
+  flex: 1 1 auto;
+  min-width: 60px;
+  max-width: 100px;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #ffffff;
+  padding: 0;
+
+  font-family: var(--font-ui);
+  font-size: 14px;
+  font-weight: 500;
+  text-align: left;
+}
+
+#panel-compress .compress-size-input::placeholder{
+  font-size: 12px;
+  color: rgba(255,255,255,.35);
+}
+
+#panel-compress .compress-size-input::-webkit-inner-spin-button,
+#panel-compress .compress-size-input::-webkit-outer-spin-button{
+  -webkit-appearance: none;
+  margin: 0;
+}
+#panel-compress .compress-size-input[type="number"]{
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+
+#panel-compress .compress-size-unit{
+  flex: 0 0 auto;
+  margin-left: 6px;
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255,255,255,.75);
+  white-space: nowrap;
+}
+
+/* ===== Кнопки "Сжать" и "Сохранить в…" ===== */
+
+#panel-compress #startCompress,
+#panel-compress #pickFolderCompress{
+  padding: 0 20px;
+  border-radius: 999px;
+  border: none;
+  white-space: nowrap;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  font-family: var(--font-ui);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* зелёная кнопка */
+#panel-compress #startCompress{
+  background: #92d83c;
+  color: #181818;
+  box-shadow: 0 10px 22px rgba(146, 216, 60, 0.55);
+}
+#panel-compress #startCompress:hover{
+  background: #a3e34e;
+  transform: translateY(-1px);
+}
+#panel-compress #startCompress:active{
+  transform: translateY(0);
+  box-shadow: 0 6px 16px rgba(146,216,60,0.45);
+}
+
+/* серая "Сохранить в..." */
+#panel-compress #pickFolderCompress{
+  background: #2a2a2a;
+  color: #f5f5f5;
+  font-weight: 500;
+}
+#panel-compress #pickFolderCompress:hover{
+  background: #313131;
+  transform: translateY(-1px);
+}
+#panel-compress #pickFolderCompress:active{
+  transform: translateY(0);
+}
+
+/* ===== Путь сохранения ===== */
+
+#panel-compress .compress-path{
+  flex: 1 1 180px;
+  min-width: 100px;
+  max-width: 220px;
+  font-size: 12px;
+  opacity: .7;
+  text-align: right;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* когда пути нет — не занимаем лишнее место */
+#panel-compress .compress-path:empty{
+  display: none;
+}
+
+/* ===== CONVERT BAR: капсула по сетке, 2 строки ===== */
+
+#panel-convert .convert-bar {
+  width: min(1040px, calc(100% - 24px));
+  margin: 10px auto 0;
+  padding: 10px 14px;
+
+  border-radius: 999px;
+  background: #202020;
+  border: 1px solid #2a2a2a;
+  box-shadow: 0 10px 26px rgba(0,0,0,0.45);
+}
+
+/* отключаем flex-настройки от .bar.capsule */
+#panel-convert .convert-bar.capsule {
+  display: block;
+}
+
+/* 1-я строка (дроп-зона) + 2-я строка (настройки) */
+#panel-convert .convert-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* 1. Центрируем текст в первой пилюле и растягиваем на ширину капсулы */
+#panel-convert .input-file-pill {
+  position: relative;
+  width: 90%;               /* как ты сделал */
+  max-width: 880px;         /* можно любое число, не обязательно */
+  margin: 0 auto;           /* ← центрируем пилюлю в капсуле */
+  flex: 0 1 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 36px;
+}
+
+
+/* Текст по центру, независимо от скрытых элементов справа/слева */
+#panel-convert .input-file-pill__label {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: calc(100% - 40px);  /* небольшие отступы от краёв */
+  padding: 0;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* В "Конвертировать" размер файла не нужен — глушим его */
+#panel-convert .input-file-pill__size,
+#panel-convert #pickedFileSize {
+  display: none;
+}
+
+
+
+/* 2. Вторая строка: flex-ряд, центрированный, с равными зазорами */
+#panel-convert .convert-row {
+  display: flex;
+  flex-wrap: wrap;           /* при нехватке места элементы переносятся внутрь капсулы */
+  justify-content: center;   /* ВСЮ группу центрируем внутри капсулы */
+  align-items: center;
+  gap: 12px;                 /* одинаковый зазор между всеми элементами */
+}
+
+
+
+
+/* "Видео" и "Формат" — компактные «чипсы» слева */
+#panel-convert .convert-row .seg {
+  flex: 0 0 auto;   /* не растягиваться, размер по контенту */
+  width: auto;
+}
+
+
+/* селекты — таблетки, чуть уже, чтобы кнопка не падала на 3-ю строку */
+#panel-convert .convert-row select {
+  width: auto;
+  padding: 8px 10px;   /* было 8px 12px */
+  border-radius: 999px;
+  background: #151515;
+  border: 1px solid rgba(255,255,255,0.16);
+  color: var(--text);
+  font-family: var(--font-ui);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+
+/* кнопки — авто по содержимому, не сжимаются */
+#panel-convert #pickFolderConvert,
+#panel-convert #startConvert {
+  padding: 10px 20px;
+  white-space: nowrap;
+}
+
+/* зелёная кнопка "Конвертировать" */
+#panel-convert #startConvert {
+  background: #92d83c;
+  color: #181818;
+  border: none;
+  box-shadow: 0 10px 22px rgba(146, 216, 60, 0.55);
+  font-family: var(--font-ui);
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 999px;
+}
+
+#panel-convert #startConvert:hover {
+  background: #a3e34e;
+  transform: translateY(-1px);
+}
+
+#panel-convert #startConvert:active {
+  transform: translateY(0);
+  box-shadow: 0 6px 16px rgba(146, 216, 60, 0.45);
+}
+
+/* серая "Сохранить в..." как в "Сжать" */
+#panel-convert #pickFolderConvert {
+  background: #2a2a2a;
+  color: #f5f5f5;
+  border: none;
+  font-family: var(--font-ui);
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: 999px;
+}
+
+#panel-convert #pickFolderConvert:hover {
+  background: #313131;
+  transform: translateY(-1px);
+}
+
+#panel-convert #pickFolderConvert:active {
+  transform: translateY(0);
+}
+
+/* Первый селект "Видео" — максимально компактная пилюля */
+#panel-convert .convert-row .seg:first-child select {
+  width: auto;        /* по содержимому */
+  min-width: 64px;    /* можно даже 60, если хочешь ещё меньше */
+  padding: 8px 10px;  /* меньше воздуха слева/справа и по высоте */
+  font-size: 14px;    /* чутка меньше шрифт = меньше ширина */
+}
+
+/* Второй селект "Формат" — тоже компактная пилюля */
+#panel-convert .convert-row .seg:nth-child(2) select {
+  width: auto;        /* по содержимому, а не растягиваться */
+  min-width: 140px;   /* можешь поиграться: 130–150 */
+  max-width: 220px;   /* чтобы не раздувался, если текст длинный */
+  padding: 8px 10px;  /* та же высота, что у остальных */
+}
+
+/* путь — занимает остаток строки справа */
+#panel-convert #savePathConvert {
+  flex: 0 1 220px;           /* путь занимает остаток строки, но может сжаться */
+  text-align: right;
+  font-size: 12px;
+  opacity: 0.7;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+
+/* 3. Адаптив: на узких экранах только путь уходит на новую строку */
+@media (max-width: 900px) {
+  #panel-convert .convert-row {
+    justify-content: center;     /* просто оставляем центрирование */
+  }
+
+  #panel-convert #savePathConvert {
+    flex: 0 1 100%;
+    text-align: center;          /* путь переезжает на вторую строку и центрируется */
+  }
+}
+
+
+
+/* левая пилюля "Файл не выбран" — шире, тянется сильнее */
+#panel-compress .input-file-pill {
+  flex: 1 1 360px;  /* было ~240–280, увеличиваем базу */
+  max-width: 480px; /* можно подогнать: 420–520 по вкусу */
+}
+
+
+/* убираем старый margin-left, который ломает gap */
+#panel-compress .compress-bar > * + * {
+  margin-left: 0 !important;
+}
+
+/* Плашка выбора файла ДЛЯ "СЖАТЬ" */
+#panel-compress .input-file-pill {
+  position: relative;
+}
+
+/* Имя файла в "СЖАТЬ": оставляем место справа под размер */
+#panel-compress .input-file-pill__label {
+  display: block;
+  padding-right: 42px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Исходный размер файла справа (серый) — только для "СЖАТЬ" */
+#panel-compress .input-file-pill__size,
+#panel-compress #pickedFileSize {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 12px;
+  color: var(--muted);
+  pointer-events: none;
+}
+
+/* ===== SETTINGS: layout + cards ===== */
+
+#panel-settings{
+  width: min(900px, calc(100% - 24px));
+  margin: 10px auto 32px;
+}
+
+.settings-layout{
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Карточка одной секции */
+.settings-card{
+  background: rgba(255,255,255,.04);
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,.06);
+  padding: 14px 18px 16px;
+}
+
+/* Заголовок карточки */
+.settings-card__header{
+  margin-bottom: 6px;
+}
+.settings-card__title{
+  margin: 0 0 2px;
+  font-size: 15px;
+  font-weight: 600;
+}
+/* по умолчанию — как было */
+.settings-card__title{
+  margin: 0 0 2px;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.settings-card__subtitle{
+  margin: 0;
+  font-size: 12px;
+  opacity: .7;
+}
+
+/* Тело карточки */
+.settings-card__body{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Вариант для 2-колоночной звуковой карты */
+.settings-card__body--grid2{
+  display: grid;
+  grid-template-columns: minmax(0,1fr) minmax(0,1fr);
+  gap: 10px 20px;
+}
+
+/* Блок обновлений внутри правой части: версия + подпись + кнопка в колонку */
+.settings-card__body--updates{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;   /* прижимаем к правому краю */
+  gap: 8px;
+}
+
+/* Карточка "Автообновление / версия":
+   слева — заголовок, справа — версия + кнопка, всё по центру по вертикали */
+.settings-card--updates{
+  display: flex;
+  align-items: center;          /* выравнивание по центру по вертикали */
+  justify-content: space-between;
+  gap: 24px;
+}
+
+/* убираем нижний отступ у хедера и тела внутри этой карточки */
+.settings-card--updates .settings-card__header{
+  margin: 0;
+}
+
+.settings-card--updates .settings-card__body{
+  margin: 0;
+}
+
+
+/* Строка параметра: сетка label/controls */
+.settings-field{
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 2fr);
+  align-items: center;
+  column-gap: 18px;
+  row-gap: 6px;
+}
+
+/* Карточка "История скачиваний": текст слева, кнопки справа, всё по центру по вертикали */
+.settings-card--history {
+  display: flex;
+  align-items: center;          /* заголовок и кнопки по вертикали по центру */
+  justify-content: space-between;
+  gap: 24px;
+}
+
+/* Левая колонка с текстом */
+.settings-card--history .settings-card__header {
+  margin: 0;
+  flex: 0 0 auto;               /* ширина ровно по контенту */
+}
+
+/* Заголовок и подзаголовок — без переноса */
+.settings-card--history .settings-card__title,
+.settings-card--history .settings-card__subtitle {
+  white-space: nowrap;
+}
+
+/* Правая часть с кнопками */
+.settings-card--history .settings-card__body {
+  margin: 0;
+  flex: 1 1 auto;               /* занимает оставшееся место под кнопки */
+}
+
+/* Внутри — просто ряд, без сетки label/controls */
+.settings-card--history .settings-field {
+  margin: 0;
+  display: flex;
+  justify-content: flex-end;    /* прижимаем капсулу с кнопками вправо */
+  align-items: center;
+}
+
+/* Лейбл в этой карточке не нужен */
+.settings-card--history .settings-label {
+  display: none;
+}
+
+/* Кнопки в одну линию, не переносятся */
+.settings-card--history .settings-control {
+  flex-wrap: nowrap;
+}
+
+
+.settings-label{
+  font-size: 13px;
+  opacity: .9;
+}
+
+.settings-control{
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* Путь + кнопка: текст растягивается, кнопка справа */
+.settings-control--path{
+  flex-wrap: nowrap;
+}
+.settings-path{
+  flex: 1 1 auto;
+  min-width: 0;
+  max-width: 100%;
+  font-size: 12px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #151515;
+  border: 1px solid rgba(255,255,255,.14);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Мелкие кнопки внутри настроек */
+.btn-sm{
+  padding: 6px 10px;
+  font-size: 13px;
+  border-radius: 999px;
+}
+
+/* Блок версии */
+.settings-version-block{
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.settings-version-line{
+  font-size: 13px;
+}
+.settings-version{
+  font-weight: 600;
+}
+.settings-help-text{
+  margin: 0;
+  font-size: 12px;
+  opacity: .7;
+}
+
+/* Низ вкладки */
+.settings-footer{
+  margin-top: 4px;
+  display: flex;
+  flex-direction: column;      /* текст под кнопкой */
+  align-items: center;         /* всё по центру */
+  gap: 4px;                    /* маленький отступ между кнопкой и текстом */
+}
+
+.settings-save-btn{
+  padding-inline: 18px;
+}
+
+/* Текст "Настройки сохранены" под кнопкой */
+.settings-save-status{
+  font-size: 12px;
+  color: var(--muted);
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity .25s ease, transform .25s ease;
+  text-align: center;
+}
+
+.settings-save-status.visible{
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Состояние "сохраняем" — пульс зелёным */
+.settings-save-btn.saving{
+  position: relative;
+  pointer-events: none;
+}
+
+.settings-save-btn.saving::after,
+.settings-save-btn.saved::after{
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: 999px;
+  border: 1px solid rgba(146,216,60,0.9);
+  box-shadow: 0 0 0 0 rgba(146,216,60,0.6);
+  animation: settings-save-pulse .6s ease-out;
+}
+
+
+/* Состояние "сохранено" — кнопка зелёная */
+.settings-save-btn.saved{
+  background: #92d83c;
+  color: #ffffff;
+  box-shadow: 0 0 0 0 rgba(146,216,60,0.6);
+}
+
+/* Адаптив: звуки в одну колонку на узких экранах */
+@media (max-width: 720px){
+  .settings-card__body--grid2{
+    grid-template-columns: minmax(0,1fr);
+  }
+  .settings-card__body--updates{
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .settings-footer{
+    justify-content: stretch;
+  }
+  .settings-save-btn{
+    width: 100%;
+    justify-content: center;
+  }
+  /* Подпись под кнопкой "Сохранить" */
+  .settings-save-status {
+    margin: 4px 0 0;
+    text-align: center;
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity .25s ease, transform .25s ease;
+  }
+
+  /* когда видима */
+  .settings-save-status.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* состояние "идёт сохранение" */
+  .settings-save-btn.saving {
+    cursor: wait;
+    opacity: .8;
+  }
+
+
+  @keyframes settings-save-pulse {
+    from {
+      box-shadow: 0 0 0 0 rgba(146,216,60,.55);
+    }
+    to {
+      box-shadow: 0 0 0 18px rgba(146,216,60,0);
+    }
+  }
+
+}
+/* === Белый текст на всех кнопках настроек === */
+.btn,
+.btn-sm {
+  color: #ffffff;
+}
+
+/* чтобы и у дизейбленных не становился грязно-серым */
+button:disabled,
+.btn:disabled,
+.btn-sm:disabled {
+  color: rgba(255,255,255,.7);
+}
+
+/* Всему кликабельному — курсор-«рука» */
+button,
+.btn,
+.btn-sm,
+.icon-btn,
+.action,
+.dl-cat,
+.sort-trigger,
+.select-option,
+.sort-opt,
+.switch,
+.toggle {
+  cursor: pointer;
+}
+
+/* Полностью глушим старый "хэндл" топбара (две белые палочки) */
+.topbar::before,
+.topbar::after {
+  content: none !important;
+  display: none !important;
+}
+
+/* На всякий случай, если это были отдельные элементы */
+.topbar-handle,
+.topbar-buttons,
+.window-controls {
+  display: none !important;
+}
+
+
+/* ==== FIX: убираем белые полосы/рамку вокруг превью ==== */
+.dl-list .card .thumb-wrap,
+.dl-list .card .thumb,
+.dl-list .card .thumb-wrap img {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  background-clip: padding-box;
+}
+
+/* на всякий случай: браузерная рамка для кликабельных картинок */
+.dl-list .card a img.thumb {
+  border: 0 !important;
+}
+
+
+
+/* === AUDIO THUMB FINAL FIX === */
+
+/* Контейнер превью: один цвет фона, без рамок/паддингов */
+.dl-list .card .thumb-wrap {
+  width: 96px;
+  flex: 0 0 96px;
+  aspect-ratio: 16 / 9;
+  height: auto;
+
+  padding: 0 !important;
+  margin: 0;
+  border: none !important;
+  border-radius: 10px;
+  overflow: hidden;
+
+  background: #141722 !important; /* тот же цвет, что у иконки */
+  box-shadow: none !important;
+}
+
+/* Базовый стиль для любых превью */
+.dl-list .card .thumb {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  object-fit: cover;
+  background: #141722;
+}
+
+/* Для аудио – просто показываем наш jpg, без дополнительных фонов */
+.dl-list .card .thumb.thumb--audio {
+  content: none;
+  object-fit: cover;
+  background: #141722 url("../assets/prewiew-music-icon.jpg") center/cover no-repeat !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Кнопка "Сохранить настройки" — белый текст и в saved, и когда выключена */
+.settings-save-btn.saved,
+.settings-save-btn.saved:disabled {
+  color: #ffffff !important;
+}
+
+
+/* ===== PRO Paywall ===== */
+
+.pro-overlay{
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,.65);
+  z-index: 999;
+}
+
+.pro-overlay.visible{
+  display: flex;
+}
+
+.pro-modal{
+  width: min(420px, 100% - 32px);
+  padding: 24px 22px 20px;
+  border-radius: 20px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-bd);
+  backdrop-filter: blur(var(--glass-blur));
+  box-shadow:
+    0 18px 60px rgba(0,0,0,.65),
+    0 0 0 1px rgba(255,255,255,.04);
+}
+
+.pro-title{
+  margin: 0 0 8px;
+  font-size: 1.3rem;
+  font-weight: 600;
+  letter-spacing: .01em;
+}
+
+.pro-reason{
+  margin: 0 0 12px;
+  font-size: .95rem;
+  color: var(--muted);
+}
+
+.pro-features{
+  margin: 0 0 16px;
+  padding-left: 18px;
+  font-size: .9rem;
+  color: var(--muted);
+}
+
+.pro-features li{
+  margin-bottom: 4px;
+}
+
+.pro-actions{
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+/* ===== PRO: бейдж и карточка аккаунта ===== */
+
+.pro-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.04);
+  color: rgba(255, 255, 255, 0.72);
+  gap: 6px;
+}
+
+.pro-badge::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: #8b8b8b;
+}
+
+.user-pro .pro-badge {
+  background: linear-gradient(135deg, #7aa2ff, #c06aff);
+  color: #ffffff;
+  border-color: transparent;
+}
+
+.user-pro .pro-badge::before {
+  background: #4dff88;
+}
+
+.pro-badge--top {
+  margin-right: 8px;
+}
+
+.pro-badge--settings {
+  font-size: 11px;
+}
+
+/* Карточка "Аккаунт и подписка" */
+.settings-card--account .settings-input {
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(0, 0, 0, 0.2);
+  color: #ffffff;
+  font-family: var(--font-ui);
+  font-size: 14px;
+}
+
+.settings-card--account .settings-input:focus-visible {
+  outline: 1px solid rgba(140, 180, 255, 0.9);
+  outline-offset: 0;
+  border-color: rgba(140, 180, 255, 0.9);
+}
+
+.settings-card--account .settings-control--inline {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.settings-hint {
+  margin: 6px 0 0;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+/* ===== FREE limit indicator (downloads per day) ===== */
+
+.free-limit {
+  display: none;                    /* по умолчанию скрыт, покажем классом .visible */
+  align-items: center;
+  gap: 8px;
+  padding: 4px 10px 4px 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+}
+
+.free-limit.visible {
+  display: inline-flex;
+}
+
+.free-limit__text {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  opacity: 0.9;
+  white-space: nowrap;
+}
+
+.free-limit__bar {
+  position: relative;
+  width: 80px;                      /* длина тонкой полоски */
+  height: 4px;                      /* она тоненькая */
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.16);
+  overflow: hidden;
+}
+
+.free-limit__bar > #free-limit-fill {
+  position: absolute;
+  inset: 0;
+  width: 0%;                        /* JS будет менять ширину */
+  border-radius: inherit;
+  background: linear-gradient(90deg, #92d83c, #c6ff7c);
+  box-shadow: 0 0 8px rgba(146, 216, 60, 0.6);
+  transition: width 0.25s ease-out;
+}
+
+/* Когда почти исчерпали лимит — можно добавить класс .near-limit */
+.free-limit.near-limit .free-limit__bar > #free-limit-fill {
+  background: linear-gradient(90deg, #ffb347, #ff6961);
+  box-shadow: 0 0 10px rgba(255, 105, 97, 0.7);
+}

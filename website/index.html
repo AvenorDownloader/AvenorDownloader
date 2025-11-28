@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+
+    <title>Avenor Downloader — умный загрузчик видео и аудио</title>
+    <meta
+      name="description"
+      content="Avenor Downloader — программа для скачивания, обрезки и конвертации видео и аудио с YouTube, Instagram, TikTok и других платформ."
+    />
+
+    <!-- Шрифт Montserrat -->
+    <link
+      rel="preconnect"
+      href="https://fonts.googleapis.com"
+    />
+    <link
+      rel="preconnect"
+      href="https://fonts.gstatic.com"
+      crossorigin
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Стили сайта -->
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      function setupProgress(fillSelector, percentSelector, options) {
+        const fill = document.querySelector(fillSelector);
+        const percentEl = document.querySelector(percentSelector);
+  
+        if (!fill || !percentEl) return;
+  
+        const duration = (options && options.duration) || 6000;
+        const fps = 60;
+        const stepTime = 1000 / fps;
+        const steps = Math.round(duration / stepTime);
+  
+        function runProgressCycle() {
+          let currentStep = 0;
+  
+          const timer = setInterval(() => {
+            currentStep++;
+  
+            const progress = Math.min(
+              100,
+              Math.round((currentStep / steps) * 100)
+            );
+  
+            fill.style.width = progress + "%";
+            percentEl.textContent = progress + "%";
+  
+            if (progress >= 100) {
+              clearInterval(timer);
+  
+              setTimeout(() => {
+                fill.style.width = "0%";
+                percentEl.textContent = "0%";
+                runProgressCycle();
+              }, 700);
+            }
+          }, stepTime);
+        }
+  
+        runProgressCycle();
+      }
+  
+      // Прогресс в hero-карточке
+      setupProgress(".hero__progress-fill", ".hero__progress-percent", {
+        duration: 6000,
+      });
+  
+      // Прогресс в мини-карточке интерфейса
+      setupProgress(".ui__task-progress-fill", ".ui__task-progress-percent", {
+        duration: 5000,
+      });
+    });
+  </script>
+  
+  
+  <body>
+    <div class="page">
+
+
+
+
+
+
+
+
+      <!-- ===== HEADER / НАВБАР ===== -->
+      <header class="header">
+        <div class="container header__inner">
+          <div class="logo">
+            <img src="/assets/Logo.png" alt="Название программы" class="logo__img" />
+          </div>
+          
+
+          <nav class="nav">
+            <a href="#why" class="nav__link">Почему Avenor</a>
+            <a href="#how" class="nav__link">Как работает</a>
+            <a href="#ui" class="nav__link">Интерфейс</a>
+            <a href="#faq" class="nav__link">FAQ</a>
+          </nav>
+
+          <a href="#download" class="header__cta">
+            Скачать
+          </a>
+        </div>
+      </header>
+
+
+
+
+
+
+
+
+
+
+      <!-- ===== HERO БЛОК ===== -->
+      <main>
+        <section class="hero" id="top">
+          <div class="container hero__inner">
+            <div class="hero__content">
+              <p class="hero__kicker">Программа для работы с видео и аудио</p>
+              <h1 class="hero__title">
+                Avenor Downloader —
+                <span class="hero__accent">умный загрузчик</span>
+                видео и аудио
+              </h1>
+              <p class="hero__subtitle">
+                Скачивай, сжимай и конвертируй контент с YouTube, Instagram,
+                TikTok и других платформ. Максимальное качество, удобный
+                интерфейс и полный контроль над файлами.
+              </p>
+
+              <div class="hero__actions">
+                <a href="#download" class="btn btn--primary">
+                  Скачать для Windows
+                </a>
+                <a href="#how" class="btn btn--ghost">
+                  Как это работает?
+                </a>
+              </div>
+
+              <p class="hero__meta">
+                Совместимо с Windows 10 / 11 · Поддержка 4K · Бесплатно с опцией PRO
+              </p>
+            </div>
+
+            <div class="hero__card">
+              <div class="hero__chip">Онлайн-видео → Файл за секунды</div>
+              <h2 class="hero__card-title">Вставь ссылку — забери файл</h2>
+              <ul class="hero__list">
+                <li>Поддержка YouTube, Instagram, TikTok и других платформ</li>
+                <li>Выбор качества: от 360p до 4K</li>
+                <li>Скачивание видео или только аудио</li>
+              </ul>
+              <div class="hero__progress">
+                <div class="hero__progress-bar">
+                  <div class="hero__progress-fill"></div>
+                </div>
+                <div class="hero__progress-meta">
+                  <span>Скачивание…</span>
+                  <span class="hero__progress-percent">0%</span>
+                </div>
+                
+              </div>
+            </div>
+          </div>
+        </section>
+
+
+
+
+
+
+
+
+
+
+        <!-- ===== ПОЧЕМУ AVENOR ===== -->
+        <section class="section" id="why">
+          <div class="container">
+            <div class="section__head">
+              <h2 class="section__title">Почему именно Avenor Downloader</h2>
+              <p class="section__subtitle">
+                Не просто «ещё один загрузчик», а полноценный инструмент для
+                работы с видео и аудио.
+              </p>
+            </div>
+
+            <div class="grid grid--4">
+              <article class="card">
+                <h3 class="card__title">Скачивает отовсюду</h3>
+                <p class="card__text">
+                  YouTube, Instagram, TikTok, Facebook, Pinterest и другие.
+                  Если ссылку можно открыть в браузере — Avenor почти всегда
+                  сможет её скачать.
+                </p>
+              </article>
+              <article class="card">
+                <h3 class="card__title">Сжатие размера видео</h3>
+                <p class="card__text">
+                  Видео не лезет в Телеграм или на почту? Сожми его в пару кликов и отправь без потери качества.
+                </p>
+              </article>
+              <article class="card">
+                <h3 class="card__title">Конвертация форматов</h3>
+                <p class="card__text">
+                  Скачался поломаный или недопустимый кодек? Возьми и тут же конвертируй его в: MP4, MOV, MKV, MP3, WAV и другие форматы. 
+                </p>
+              </article>
+              <article class="card">
+                <h3 class="card__title">Премиальный интерфейс</h3>
+                <p class="card__text">
+                  Тёмная тема, аккуратная типографика и визуальные акценты.
+                  Программа выглядит так, будто это официальный коммерческий
+                  продукт уровня топ-софта.
+                </p>
+              </article>
+            </div>
+          </div>
+        </section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <!-- ===== КАК РАБОТАЕТ ===== -->
+        <section class="section" id="how">
+          <div class="container">
+            <div class="section__head">
+              <h2 class="section__title">Как это работает</h2>
+              <p class="section__subtitle">
+                Всего три шага — и нужный ролик уже на вашем диске.
+              </p>
+            </div>
+
+            <div class="steps">
+              <div class="step">
+                <div class="step__index">1</div>
+                <h3 class="step__title">Выберите параметры скачивания</h3>
+                <p class="step__text">
+                  Формат, качество, режим (видео или аудио) и папку скачивания.
+                </p>
+              </div>
+              <div class="step">
+                <div class="step__index">2</div>
+                <h3 class="step__title">Вставить ссылку</h3>
+                <p class="step__text">
+                  Скопируйте URL видео, нажмите всего одну кнопку и скаччивание тут-же начнётся.
+                </p>
+              </div>
+              <div class="step">
+                <div class="step__index">3</div>
+                <h3 class="step__title">Наслаждайтесь результатом</h3>
+                <p class="step__text">
+                  Наглядный прогресс, статус задачи и история загрузок. Файлы
+                  всегда под контролем и в одном месте.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+
+
+
+
+
+
+
+
+
+
+
+        <!-- ===== ИНТЕРФЕЙС / UI ===== -->
+        <section class="section" id="ui">
+          <div class="container ui">
+            <div class="ui__content">
+              <h2 class="section__title">Премиальный интерфейс без перегруза</h2>
+              <p class="section__subtitle">
+                Тёмный фон, чистая типографика и аккуратные акценты
+                фирменным зелёным. Интерфейс, с которым приятно работать каждый день.
+              </p>
+              <ul class="ui__list">
+                <li>Фокус на контенте — никаких лишних элементов</li>
+                <li>Чёткая иерархия: главное — всегда под рукой</li>
+                <li>Плавные состояния кнопок и прогресса</li>
+                <li>Единый стиль для всех вкладок и карточек задач</li>
+              </ul>
+            </div>
+            <div class="ui__preview">
+              <div class="ui__window">
+                <div class="ui__window-top">
+                  <div class="ui__dots">
+                    <span></span><span></span><span></span>
+                  </div>
+                  <span class="ui__window-title">Avenor Downloader</span>
+                </div>
+            
+                <div class="ui__window-body">
+                  <!-- Вкладки программы -->
+                  <div class="ui__tabs">
+                    <button class="ui__tab ui__tab--active">Скачать</button>
+                    <button class="ui__tab">Сжать</button>
+                    <button class="ui__tab">Конвертировать</button>
+                  </div>
+            
+                  <!-- Основные контролы: Вставить ссылку + качество -->
+                  <div class="ui__controls">
+                    <button class="ui__btn-main">Вставить ссылку</button>
+                    <button class="ui__btn-secondary">
+                      Лучшее
+                      <span class="ui__caret">▾</span>
+                    </button>
+                  </div>
+            
+                  <!-- Фильтры списка задач -->
+                  <div class="ui__filters-row">
+                    <div class="ui__filters">
+                      <button class="ui__filter ui__filter--active">Все</button>
+                      <button class="ui__filter">Видео</button>
+                      <button class="ui__filter">Аудио</button>
+                    </div>
+                    <span class="ui__counter">39 элементов</span>
+                  </div>
+            
+                  <!-- Карточка загрузки с превью и прогрессом -->
+                  <div class="ui__task">
+                    <div class="ui__thumb"></div>
+            
+                    <div class="ui__task-content">
+                      <div class="ui__task-title">
+                        Sad Emotional Inspirational Travel...
+                      </div>
+                      <div class="ui__task-meta">
+                        Готово · 1920×1080 · MP4
+                      </div>
+            
+                      <div class="ui__task-progress">
+                        <div class="ui__task-progress-bar">
+                          <div class="ui__task-progress-fill"></div>
+                        </div>
+                        <span class="ui__task-progress-percent">0%</span>
+                      </div>
+                    </div>
+            
+                    <button class="ui__task-open">
+                      Открыть в папке
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>           
+          </div>
+        </section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <!-- ===== FAQ ===== -->
+        <section class="section" id="faq">
+          <div class="container">
+            <div class="section__head">
+              <h2 class="section__title">Частые вопросы</h2>
+            </div>
+
+            <div class="faq">
+              <details class="faq__item" open>
+                <summary class="faq__question">
+                  Какие платформы поддерживаются?
+                </summary>
+                <p class="faq__answer">
+                  Поддерживаются такие платформы как: YouTube, Instagram, TikTok, Facebook и Pinterest
+                </p>
+              </details>
+
+              <details class="faq__item">
+                <summary class="faq__question">
+                  Можно ли скачивать в 4K?
+                </summary>
+                <p class="faq__answer">
+                  Да, если исходный ролик доступен в 4K. Поддержка высокого
+                  разрешения реализована через встроенный модуль скачивания.
+                </p>
+              </details>
+
+              <details class="faq__item">
+                <summary class="faq__question">
+                  На каких системах работает программа?
+                </summary>
+                <p class="faq__answer">
+                  Текущая версия поддерживает Windows 10 и Windows 11. Поддержка
+                  macOS находится в планах.
+                </p>
+              </details>
+
+              <details class="faq__item">
+                <summary class="faq__question">
+                  Нужна ли подписка, чтобы пользоваться Avenor?
+                </summary>
+                <p class="faq__answer">
+                  Скачивание видео в 1080p и меньше - доступны в бесплатном плане. В более высоких разрешениях требуется подписка PRO.
+                </p>
+              </details>
+
+              <details class="faq__item">
+                <summary class="faq__question">
+                  Чем Avenor лучше онлайн-сервисов?
+                </summary>
+                <p class="faq__answer">
+                  Нет ограничений по размеру файлов, нет потери качества и
+                  раздражающей рекламы. Все операции идут локально на вашем
+                  компьютере, а файлы остаются только у вас.
+                </p>
+              </details>
+            </div>
+          </div>
+        </section>
+
+
+
+
+
+
+
+
+
+
+
+        <!-- ===== ФИНАЛЬНЫЙ CTA / СКАЧАТЬ ===== -->
+        <section class="section section--cta" id="download">
+          <div class="container section__cta-inner">
+            <div class="section__cta-content">
+              <h2 class="section__title">
+                Попробуйте Avenor Downloader бесплатно
+              </h2>
+              <p class="section__subtitle">
+                Скачивайте видео и аудио за секунды, уменьшайте их размер
+                и конвертируйте файлы под свои задачи. Всё — в одном приложении.
+              </p>
+              <div class="hero__actions">
+                <a href="#" class="btn btn--primary btn--large">
+                  Скачать для Windows
+                </a>
+                <span class="section__cta-meta">
+                  Совместимо с Windows 10 / 11 · Локальная обработка файлов
+                </span>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      <!-- ===== FOOTER ===== -->
+      <footer class="footer">
+        <div class="container footer__inner">
+          <div class="footer__brand">
+            <span>© Avenor, 2025</span>
+          </div>
+          <div class="footer__links">
+            <a href="#" class="footer__link">Политика конфиденциальности</a>
+            <a href="#" class="footer__link">Пользовательское соглашение</a>
+            <a href="mailto:support@avenor.dev" class="footer__link">
+              Поддержка
+            </a>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>

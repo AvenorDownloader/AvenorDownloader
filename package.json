@@ -1,0 +1,84 @@
+{
+  "name": "avenor-downloader",
+  "version": "1.0.0",
+  "main": "dist/main.js",
+  "type": "commonjs",
+  "description": "Avenor Downloader — умный загрузчик и конвертер видео/аудио.",
+  "author": "Avenor",
+  "license": "Proprietary",
+
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AvenorDownloader/AvenorDownloader.git"
+  },
+
+  "scripts": {
+    "clean": "rimraf dist",
+    "build": "rimraf dist && tsc -p tsconfig.main.json && tsc -p tsconfig.renderer.json",
+    "watch:main": "tsc -w -p tsconfig.main.json",
+    "watch:renderer": "tsc -w -p tsconfig.renderer.json",
+    "start:electron": "electron .",
+    "dev": "concurrently -k \"npm:watch:main\" \"npm:watch:renderer\" \"npm:start:electron\"",
+    "start": "npm run build && electron .",
+    "pack": "electron-builder --dir",
+    "dist": "npm run build && electron-builder",
+    "dist:win": "npm run build && electron-builder --win nsis"
+  },
+  "build": {
+    "appId": "com.avenor.downloader",
+    "productName": "Avenor Downloader",
+    "directories": {
+      "output": "release",
+      "buildResources": "assets"
+    },
+    "files": [
+      "dist/**/*",
+      "index.html",
+      "src/ui.css",
+      "assets/**/*",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "resources/bin",
+        "to": "bin",
+        "filter": [
+          "**/*"
+        ]
+      }
+    ],
+    "win": {
+      "target": "nsis",
+      "artifactName": "AvenorDownloader-Setup-${version}.exe",
+      "icon": "assets/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Avenor Downloader"
+    },
+    "asar": true,
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "AvenorDownloader",
+        "repo": "AvenorDownloader"
+      }
+    ]
+    
+  },
+  "devDependencies": {
+    "@types/node": "^20.19.24",
+    "concurrently": "^8.2.2",
+    "electron": "^28.2.0",
+    "electron-builder": "^24.13.3",
+    "rimraf": "^5.0.5",
+    "typescript": "^5.6.3"
+  },
+  "dependencies": {
+    "electron-updater": "^6.6.2"
+  }
+}
