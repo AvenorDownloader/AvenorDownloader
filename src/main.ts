@@ -194,50 +194,116 @@ console.log("[main] preload at", path.join(__dirname, "preload.js"));
 const ICON_PATH = path.join(__dirname, "..", "assets", "icon.png");
 let win: BrowserWindow | null = null;
 
+function setupUpdates(mainWindow: BrowserWindow) {
+  const isDev = !app.isPackaged;
 
-// === AUTO-UPDATE SETUP ===
-function initAutoUpdate() {
-  // можно включить лог, если хочешь видеть, что происходит
-  // autoUpdater.logger = console as any;
+  // Для логики: в dev просто сразу отвечаем что проверки нет
+  if (isDev) {
+    ipcMain.handle("updates:check", async () => {
+      console.log(
+        "[updates] Dev mode: skip checkForUpdates (app is not packaged)"
+      );
+      return {
+        ok: false,
+        dev: true,
+        status: "dev-skip",
+        message:
+          "Проверка обновлений работает только в установленной версии Avenor Downloader.",
+        currentVersion: app.getVersion(),
+      };
+    });
 
-  autoUpdater.autoDownload = true;          // сразу качаем обнову
-  autoUpdater.autoInstallOnAppQuit = true;  // ставим при выходе из приложения
+    ipcMain.handle("updates:install", async () => {
+      // В dev ничего не устанавливаем
+      return { ok: false, dev: true };
+    });
 
-  autoUpdater.on("update-available", () => {
-    console.log("[update] available");
-    if (win && !win.isDestroyed()) {
-      win.webContents.send("update-available");
+    return;
+  }
+
+  // ===== PROD-ВЕТКА =====
+  autoUpdater.autoDownload = true;
+  autoUpdater.autoInstallOnAppQuit = true;
+
+  // Основной хендлер, который дергает кнопка "Проверить обновления"
+  ipcMain.handle("updates:check", async () => {
+    try {
+      console.log("[updates] checkForUpdates()...");
+      const result = await autoUpdater.checkForUpdates();
+      const currentVersion = app.getVersion();
+
+      if (!result || !result.updateInfo) {
+        return {
+          ok: true,
+          status: "no-update",
+          currentVersion,
+          latestVersion: currentVersion,
+          message: "",
+        };
+      }
+
+      const info = result.updateInfo;
+      const latest = info.version || currentVersion;
+
+      if (latest === currentVersion) {
+        return {
+          ok: true,
+          status: "no-update",
+          currentVersion,
+          latestVersion: latest,
+          message: "",
+        };
+      }
+
+      // Если нашли новую версию — autoUpdater сам начнёт качать
+      return {
+        ok: true,
+        status: "available",
+        currentVersion,
+        latestVersion: latest,
+        version: latest,
+        message: "",
+      };
+    } catch (err: any) {
+      console.error("[updates] Error in checkForUpdates:", err);
+      return {
+        ok: false,
+        status: "error",
+        currentVersion: app.getVersion(),
+        message: err?.message || "Не удалось проверить обновления.",
+      };
     }
   });
 
-  autoUpdater.on("update-not-available", () => {
-    console.log("[update] not available");
-    if (win && !win.isDestroyed()) {
-      win.webContents.send("update-not-available");
-    }
+  // Когда обновление скачано, автосообщение в лог (на всякий случай)
+  autoUpdater.on("update-downloaded", (info) => {
+    console.log("[updates] Update downloaded:", info.version);
+    // Рендерер сам спросит пользователя через window.confirm,
+    // мы просто дадим возможность installUpdate вызвать:
   });
 
-  autoUpdater.on("update-downloaded", () => {
-    console.log("[update] downloaded");
-    if (win && !win.isDestroyed()) {
-      win.webContents.send("update-downloaded");
+  // Хендлер установки (renderer вызывает api.installUpdate())
+  ipcMain.handle("updates:install", async () => {
+    try {
+      console.log("[updates] quitAndInstall()");
+      // Эта функция сама закрывает приложение и ставит обновление
+      autoUpdater.quitAndInstall();
+      return { ok: true };
+    } catch (err: any) {
+      console.error("[updates] Error in quitAndInstall:", err);
+      return {
+        ok: false,
+        message: err?.message || "Не удалось установить обновление.",
+      };
     }
   });
-
-  autoUpdater.on("error", (err) => {
-    console.error("[update] error:", err);
-    if (win && !win.isDestroyed()) {
-      win.webContents.send("update-error", String(err));
-    }
-  });
-
-  // стартуем первую проверку
-  autoUpdater.checkForUpdatesAndNotify();
 }
+
 // === END AUTO-UPDATE SETUP ===
 
-function createWindow() {
-  win = new BrowserWindow({
+
+function createWindow(): BrowserWindow {
+  const mainWin = new BrowserWindow({
     width: 874,
     height: 701,
     minWidth: 874,
@@ -246,11 +312,11 @@ function createWindow() {
     icon: ICON_PATH,
 
     frame: true,
-    autoHideMenuBar: true, // ← отключаем системную рамку и кнопки
+    autoHideMenuBar: true,
     transparent: false,
     hasShadow: true,
     roundedCorners: true,
-    titleBarOverlay: false, // на всякий случай, чтобы ничего не рисовало сверху
+    titleBarOverlay: false,
 
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
@@ -259,7 +325,8 @@ function createWindow() {
     },
   });
 
-  // ===== Минимальное меню, чтобы работали Ctrl+R и Ctrl+Shift+I =====
+  win = mainWin; // обновляем глобальную ссылку
+
   const isMac = process.platform === "darwin";
 
   const template: any[] = [
@@ -278,19 +345,10 @@ function createWindow() {
     {
       label: "View",
       submenu: [
-        {
-          role: "reload", // перезагрузка
-          accelerator: "CmdOrCtrl+R",
-        },
-        {
-          role: "forceReload", // жёсткая перезагрузка
-          accelerator: "CmdOrCtrl+Shift+R",
-        },
+        { role: "reload", accelerator: "CmdOrCtrl+R" },
+        { role: "forceReload", accelerator: "CmdOrCtrl+Shift+R" },
         { type: "separator" },
-        {
-          role: "toggleDevTools", // DevTools
-          accelerator: "CmdOrCtrl+Shift+I",
-        },
+        { role: "toggleDevTools", accelerator: "CmdOrCtrl+Shift+I" },
       ],
     },
   ];
@@ -298,22 +356,22 @@ function createWindow() {
   const menu = Menu.buildFromTemplate(template);
   Menu.setApplicationMenu(menu);
 
-  // сообщаем рендеру, развернуто окно или нет
-  win.on("maximize", () =>
-    win?.webContents.send("win:state", { isMaximized: true })
+  mainWin.on("maximize", () =>
+    mainWin.webContents.send("win:state", { isMaximized: true })
   );
-  win.on("unmaximize", () =>
-    win?.webContents.send("win:state", { isMaximized: false })
+  mainWin.on("unmaximize", () =>
+    mainWin.webContents.send("win:state", { isMaximized: false })
   );
 
-  win.setMinimumSize(739, 682);
+  mainWin.setMinimumSize(739, 682);
 
-  // В dev и в проде путь собираем от dist/main.js -> ../index.html
   const indexPath = path.join(__dirname, "..", "index.html");
   console.log("[main] loading index from", indexPath);
+  mainWin.loadFile(indexPath);
 
-  win.loadFile(indexPath);
+  return mainWin;
 }
+
 
 
 
@@ -321,11 +379,11 @@ app.whenReady().then(() => {
   // 1) регистрируем IPC-обработчики лицензии
   registerLicenseIpc();
 
-  // 2) создаём окно как раньше
-  createWindow();
+  // 2) создаём окно
+  const mainWindow = createWindow();
 
-  // 3) запускаем систему автообновлений
-  initAutoUpdate();
+  // 3) запускаем систему автообновлений (наш новый setupUpdates)
+  setupUpdates(mainWindow);
 });
 
 
@@ -462,66 +520,6 @@ ipcMain.handle("settings:pickDownloadDir", async () => {
 
 // ===== APP (версия и обновления) =====
 ipcMain.handle("app:getVersion", async () => app.getVersion());
-
-// Ручная проверка обновлений по кнопке "Проверить обновления"
-ipcMain.handle("app:checkUpdates", async () => {
-  const current = app.getVersion();
-
-  // 🔹 В DEV-режиме вообще не трогаем autoUpdater
-  if (!app.isPackaged) {
-    console.log(
-      "[updates] Dev mode: skip checkForUpdates (app is not packaged)"
-    );
-    return {
-      status: "dev-skip",
-      currentVersion: current,
-      message:
-        "Проверка обновлений работает только в установленной версии Avenor Downloader.",
-    };
-  }
-
-  try {
-    // в проде уже используем autoUpdater
-    const res = await autoUpdater.checkForUpdates();
-
-    if (!res || !res.updateInfo) {
-      return {
-        status: "no-update",
-        currentVersion: current,
-        message: "Установлена последняя версия.",
-      };
-    }
-
-    const latest = res.updateInfo.version;
-
-    // тут можно потом добавить autoDownload / downloadUpdate и т.п.
-    return {
-      status: "no-update", // или "downloaded", если будешь качать апдейт
-      currentVersion: current,
-      latestVersion: latest,
-      message: `Последняя версия уже установлена (${latest}).`,
-    };
-  } catch (e) {
-    console.error("[updates] checkUpdates error:", e);
-    return {
-      status: "error",
-      currentVersion: current,
-      message: "Не удалось проверить обновления.",
-    };
-  }
-});
-
-
-// Установка скачанного обновления по кнопке "Установить и перезапустить"
-ipcMain.handle("app:installUpdate", async () => {
-  try {
-    autoUpdater.quitAndInstall();
-    return { ok: true };
-  } catch (err) {
-    console.error("[app:installUpdate] error:", err);
-    return { ok: false, error: String(err) };
-  }
-});
 
 
 // перед регистрацией снимаем старый обработчик, если он был

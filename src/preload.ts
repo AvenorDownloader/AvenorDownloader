@@ -24,9 +24,10 @@ contextBridge.exposeInMainWorld("Avenor", {
   getVersion: () => ipcRenderer.invoke("app:getVersion"),
   getAssetUrl: (rel: string) => ipcRenderer.invoke("app:getAssetUrl", rel),
 
-  checkUpdates: () => ipcRenderer.invoke("app:checkUpdates"),
-  installUpdate: () => ipcRenderer.invoke("app:installUpdate"),
-  
+  // новые IPC-каналы автообновления (совпадают с main.ts)
+  checkUpdates: () => ipcRenderer.invoke("updates:check"),
+  installUpdate: () => ipcRenderer.invoke("updates:install"),
+
   // ▼ HISTORY
   getHistory: () => ipcRenderer.invoke("history:get"),
   historyRemove: (id: string) => ipcRenderer.invoke("history:remove", id),
