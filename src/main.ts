@@ -465,31 +465,52 @@ ipcMain.handle("app:getVersion", async () => app.getVersion());
 
 // Ручная проверка обновлений по кнопке "Проверить обновления"
 ipcMain.handle("app:checkUpdates", async () => {
-  try {
-    const result = await autoUpdater.checkForUpdates();
+  const current = app.getVersion();
 
-    // если обновления нет — result может быть null/undefined
-    if (!result || !result.updateInfo) {
+  // 🔹 В DEV-режиме вообще не трогаем autoUpdater
+  if (!app.isPackaged) {
+    console.log(
+      "[updates] Dev mode: skip checkForUpdates (app is not packaged)"
+    );
+    return {
+      status: "dev-skip",
+      currentVersion: current,
+      message:
+        "Проверка обновлений работает только в установленной версии Avenor Downloader.",
+    };
+  }
+
+  try {
+    // в проде уже используем autoUpdater
+    const res = await autoUpdater.checkForUpdates();
+
+    if (!res || !res.updateInfo) {
       return {
-        available: false,
-        currentVersion: app.getVersion(),
+        status: "no-update",
+        currentVersion: current,
+        message: "Установлена последняя версия.",
       };
     }
 
+    const latest = res.updateInfo.version;
+
+    // тут можно потом добавить autoDownload / downloadUpdate и т.п.
     return {
-      available: true,
-      currentVersion: app.getVersion(),
-      latestVersion: result.updateInfo.version,
+      status: "no-update", // или "downloaded", если будешь качать апдейт
+      currentVersion: current,
+      latestVersion: latest,
+      message: `Последняя версия уже установлена (${latest}).`,
     };
-  } catch (err) {
-    console.error("[app:checkUpdates] error:", err);
+  } catch (e) {
+    console.error("[updates] checkUpdates error:", e);
     return {
-      available: false,
-      currentVersion: app.getVersion(),
-      error: String(err),
+      status: "error",
+      currentVersion: current,
+      message: "Не удалось проверить обновления.",
     };
   }
 });
+
 
 // Установка скачанного обновления по кнопке "Установить и перезапустить"
 ipcMain.handle("app:installUpdate", async () => {

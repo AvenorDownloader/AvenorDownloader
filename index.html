@@ -109,25 +109,25 @@
 
       <!-- История скачиваний: общий контейнер -->
       <div class="dl-box">
-        <div id="download-empty" class="dl-empty hidden" aria-hidden="true">
-          <img src="assets/empty-download.png"
-               alt="Здесь будет история скачиваний" />
-        </div>        
-        <!-- НОВОЕ: полоска лимита Free -->
+        <!-- Полоса лимита FREE -->
         <div id="free-limit-bar" class="free-limit-bar">
           <div class="free-limit-track">
             <div class="free-limit-fill"></div>
           </div>
         </div>
-        
-      
+
         <div class="dl-scroll">
           <main id="list-download" class="dl-list"></main>
+
           <div id="download-empty" class="dl-empty hidden" aria-hidden="true">
-            <!-- тут как было -->
+            <img
+              src="assets/empty-download.png"
+              alt="Здесь будет история скачиваний"
+            />
           </div>
         </div>
       </div>
+
       
 
     </section>
@@ -346,22 +346,25 @@
 
       <!-- История конвертаций в таком же боксе, как и у других вкладок -->
       <div class="dl-box">
-        <div id="download-empty" class="dl-empty hidden" aria-hidden="true">
-          <img src="assets/empty-download.png"
-               alt="Здесь будет история скачиваний" />
-        </div>
-      
-        <!-- НОВОЕ: полоска лимита Free -->
-        <div id="free-limit-bar" class="free-limit-bar">
+        <!-- Полоса лимита FREE для конвертаций -->
+        <div id="free-limit-bar-convert" class="free-limit-bar">
           <div class="free-limit-track">
             <div class="free-limit-fill"></div>
           </div>
         </div>
-      
+
         <div class="dl-scroll">
-          <main id="list-download" class="dl-list"></main>
+          <main id="list-convert" class="dl-list"></main>
+
+          <div id="convert-empty" class="dl-empty hidden" aria-hidden="true">
+            <img
+              src="assets/change.png"
+              alt="Здесь будет история конвертаций"
+            />
+          </div>
         </div>
       </div>
+
       
 
     </section>
